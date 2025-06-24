@@ -1,0 +1,101 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  1: 인트로 - 발표 시작
+  슬라이드입니다. 
+-->
+<section data-transition="zoom" data-menu-title="시작">
+  <h2 class="r-fit-text">🐾 "멍탐정" 프로젝트 아키텍처 발표 🕵️‍♂️</h2>
+
+  <h4 style="margin-top: 30px; color: #77a7ff">
+    Terraform, FastAPI, Streamlit을 활용한<br />AI 기반 피싱 대응 훈련 플랫폼
+    구축기
+  </h4>
+
+  <aside class="notes">
+    안녕하세요. '멍탐정' 프로젝트의 아키텍처와 개발 과정을 발표할 OOO입니다.
+    <br /><br />
+    오늘 발표에서는 <strong>인프라 자동화를 위한 Terraform</strong>,
+    <strong>고성능 백엔드를 위한 FastAPI</strong>, 그리고
+    <strong>신속한 관리자 페이지 개발을 위한 Streamlit</strong>, 이 세 가지 핵심
+    기술을 어떻게 유기적으로 결합하여 AI 기반의 피싱 대응 훈련 플랫폼을
+    구축했는지 그 전체 여정을 공유드리고자 합니다. <br /><br />
+    인프라부터 실제 서비스까지, 각 기술을 <strong>왜(Why)</strong> 선택했고,
+    <strong>어떻게(How)</strong> 구현했는지, 그리고 그 과정에서
+    <strong>무엇을 경험했는지(Experience)</strong> 상세히 말씀드리겠습니다.
+  </aside>
+</section>
+
+<!-- 
+  이 파일은 Reveal.js 기준
+  1.5: 프로젝트 타임라인
+  슬라이드입니다. (인트로 바로 다음 위치)
+-->
+<section data-menu-title="프로젝트 타임라인">
+  <h2>프로젝트 타임라인: 4주간의 여정 🗓️</h2>
+  <p>
+    이 프로젝트는 총 4주에 걸쳐, 각 주차별 명확한 목표를 가지고 체계적으로
+    진행되었습니다.
+  </p>
+  <div
+    style="
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      text-align: center;
+      margin-top: 40px;
+    "
+  >
+    <div class="fragment" data-fragment-index="1" style="flex: 1">
+      <div style="font-size: 3em">☁️</div>
+      <h4><strong>1주차: 데브옵스</strong></h4>
+      <p style="font-size: 0.9em">Terraform으로<br />인프라 뼈대 구축</p>
+    </div>
+
+    <div class="fragment" data-fragment-index="2" style="flex: 1">
+      <div style="font-size: 3em">⚙️</div>
+      <h4><strong>2주차: 백엔드</strong></h4>
+      <p style="font-size: 0.9em">FastAPI로<br />핵심 API 개발</p>
+    </div>
+
+    <div class="fragment" data-fragment-index="3" style="flex: 1">
+      <div style="font-size: 3em">🖥️</div>
+      <h4><strong>3주차: 프론트엔드</strong></h4>
+      <p style="font-size: 0.9em">Streamlit으로<br />관리자 페이지 구현</p>
+    </div>
+
+    <div class="fragment" data-fragment-index="4" style="flex: 1">
+      <div style="font-size: 3em">🔗</div>
+      <h4><strong>4주차: 통합 및 고도화</strong></h4>
+      <p style="font-size: 0.9em">전체 시스템 연동 및<br />배포 자동화 완성</p>
+    </div>
+  </div>
+  <aside class="notes">
+    본격적인 기술 설명에 앞서, 저희가 어떤 일정으로 프로젝트를 진행했는지 간략히
+    보여드리겠습니다. 프로젝트는 총 4주간 진행되었습니다.
+    <br /><br />
+    <strong>1주차는 '데브옵스 주간'이었습니다.</strong>
+    <br />
+    가장 먼저 Terraform을 사용하여 프로젝트의 기반이 될 클라우드 인프라의 뼈대를
+    구축했습니다. VPC 네트워크, 데이터베이스, 기본 서버 환경 등을 코드로
+    정의하는 작업을 진행했습니다.
+    <br /><br />
+    <strong>2주차는 '백엔드 주간'이었습니다.</strong>
+    <br />
+    구축된 인프라 위에서 FastAPI를 사용하여 서비스의 핵심 로직이 담긴 API들을
+    개발했습니다. 사용자 인증, 대화 처리, AI 연동 등의 기능을 구현했습니다.
+    <br /><br />
+    <strong>3주차는 '프론트엔드 주간'이었습니다.</strong>
+    <br />
+    개발된 백엔드 API를 테스트하고 데이터를 쉽게 관리하기 위해, Streamlit을
+    사용하여 신속하게 관리자 페이지를 만들었습니다.
+    <br /><br />
+    <strong>마지막 4주차는 '통합 및 고도화 주간'이었습니다.</strong>
+    <br />
+    각각 개발된 인프라, 백엔드, 프론트엔드를 하나로 엮어 전체 시스템이 원활하게
+    동작하도록 연동하고, GitHub Actions를 이용한 배포 자동화 파이프라인을
+    최종적으로 완성했습니다.
+    <br /><br />
+    그럼, 이 4주간의 여정을 함께한 <strong>저희를 만든 기술들</strong>은
+    무엇인지, 다음 슬라이드에서 바로 확인해보겠습니다.
+  </aside>
+</section>

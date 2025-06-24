@@ -1,0 +1,54 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  6: 인프라 배포 자동화 - 어떻게 자동으로 배포되는가?
+  슬라이드입니다. 
+-->
+<section data-menu-title="배포 자동화 (How)">
+  <h3>How? ②: GitHub Actions로 완전 자동화하기</h3>
+  <p>
+    모든 인프라 코드는 <strong>GitHub Actions</strong>와 연동되어, 코드 변경이
+    자동으로 실제 AWS 인프라에 반영됩니다. <br />
+    이를 통해 <strong>사람의 실수가 개입될 여지가 없는</strong> 완벽한 자동화
+    배포 환경을 구축했습니다.
+  </p>
+  <div class="mermaid" style="margin-top: 20px">
+    <pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+sequenceDiagram
+    participant D as 🧑‍💻 Developer
+    participant G as <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="20" /> GitHub
+    participant A as 🤖 GitHub Actions
+    participant TFC as ☁️ Terraform Cloud
+    participant AWS as <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" width="25" /> AWS
+
+    D->>G: 1. `main` 브랜치에<br>Terraform 코드 Push
+    G->>A: 2. Webhook 트리거
+    A->>TFC: 3. Terraform Plan & Apply 요청
+    TFC->>AWS: 4. 인프라 변경 사항 적용<br>(VPC, EC2, RDS 등)
+    AWS-->>TFC: 5. 적용 결과 반환
+    TFC-->>A: 6. 작업 결과 반환
+    A-->>G: 7. 워크플로우 상태 업데이트 (성공/실패)
+    </pre>
+  </div>
+  <aside class="notes">
+    이렇게 코드로 작성된 인프라는 어떻게 실제 AWS 클라우드에 반영될까요? 저희는
+    이 모든 과정을 GitHub Actions를 통해 자동화했습니다.
+    <br /><br />
+    흐름은 다음과 같습니다.
+    <br />
+    1. 개발자가 인프라 코드를 수정하고 GitHub의 `main` 브랜치에 푸시합니다. 2.
+    GitHub은 이 변경을 감지하고, 미리 정의된 GitHub Actions 워크플로우를
+    실행시킵니다. 3. GitHub Actions는 Terraform Cloud에게 "이 코드로 인프라를
+    변경해줘" 라고 요청을 보냅니다. (Plan & Apply) 4. Terraform Cloud는 AWS에
+    접속하여 실제 인프라를 코드와 일치하도록 변경합니다. 예를 들어, EC2 인스턴스
+    타입을 바꾸거나, 새로운 보안 그룹 규칙을 추가하는 등의 작업을 수행합니다. 5.
+    작업이 완료되면 AWS는 그 결과를 Terraform Cloud에, Terraform Cloud는 다시
+    GitHub Actions에 알려줍니다. 6. 최종적으로 개발자는 GitHub에서 모든 배포
+    과정이 성공했는지, 혹은 실패했다면 어느 부분에서 문제가 발생했는지 즉시
+    확인할 수 있습니다.
+    <br /><br />
+    이 자동화 파이프라인 덕분에, 저희는 더 이상 수동으로 AWS 콘솔에 접속할
+    필요가 없어졌고, 모든 변경 이력이 코드로 남게 되어 안정적이고 신뢰할 수 있는
+    인프라 운영이 가능해졌습니다.
+  </aside>
+</section>

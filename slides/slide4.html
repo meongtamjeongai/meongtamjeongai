@@ -1,0 +1,139 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  4: 인프라 전략 - 왜 코드로 관리하는가? (이미지 추가 버전)
+  슬라이드입니다. 
+-->
+<section data-menu-title="인프라 전략">
+  <section data-menu-title="Why IaC?">
+    <h2>인프라 전략: "레고 블록처럼" 코드로 조립하고 자동화하기 🧱</h2>
+    <div style="margin: 24px 0; text-align: center">
+      <img
+        class="r-stretch placeholder"
+        src="assets/terraform.png"
+        style="border-radius: 12px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08)"
+      />
+    </div>
+    <p>
+      저희는 서버, 데이터베이스 같은 인프라를 더 이상 손으로 하나씩 만들지
+      않습니다. <br />
+      <strong style="color: #77a7ff"
+        >마치 레고 설명서를 보듯, '코드'를 통해 전체 시스템을 조립하고 완전
+        자동화합니다.</strong
+      >
+    </p>
+    <aside class="notes">
+      저희 인프라 파트의 핵심 철학은 바로 '레고 블록처럼 코드로 조립하고
+      자동화하기'입니다.
+      <br /><br />
+      서버 한 대, 데이터베이스 하나를 마우스로 클릭해서 만드는 시대는
+      지났습니다. 저희는 모든 인프라 구성을 '코드'로 정의하고, 이 코드들을 레고
+      블록처럼 조립하여 전체 시스템을 완성시킵니다.
+      <br /><br />
+      지금부터 왜 이런 방식을 선택했는지, 그 재료가 된 <strong>AWS</strong>와
+      조립 도구인 <strong>Terraform</strong> 이야기를 들려드리겠습니다.
+    </aside>
+  </section>
+
+  <section data-menu-title="Why AWS?">
+    <h3>Why? ① 재료: 왜 AWS를 선택했는가?</h3>
+    <div style="display: flex; align-items: center; gap: 20px">
+      <div style="flex: 1">
+        <p>
+          <strong>압도적인 안정성과 성숙도</strong> 때문입니다. 저희는 '직접
+          만드는 것'보다 '잘 만들어진 것을 쓰는 것'에 집중했습니다.
+        </p>
+        <ul>
+          <li class="fragment">
+            <strong>관리형 서비스 (RDS, S3):</strong> 복잡한 DB 설치, 백업, 보안
+            패치나 파일 서버 운영 부담에서 벗어나 오직
+            <strong>개발에만 집중</strong>할 수 있었습니다.
+          </li>
+          <li class="fragment">
+            <strong>유연한 확장성 (Auto Scaling):</strong> 지금은 작은 규모로
+            시작하지만, 사용자가 늘어났을 때
+            <strong>버튼 몇 번으로 서버를 증설</strong>할 수 있는 확장 가능성이
+            매력적이었습니다.
+          </li>
+          <li class="fragment">
+            <strong>풍부한 생태계와 문서:</strong> 문제가 발생했을 때 해결책을
+            찾기 쉽고, 전 세계적으로 가장 많은 사용 사례를 보유하고 있어 신뢰할
+            수 있었습니다.
+          </li>
+        </ul>
+      </div>
+      <div class="fragment" style="flex: 0.7; text-align: center">
+        <img
+          class="placeholder"
+          src="assets\aws.jpeg"
+          alt="AWS 관리형 서비스 아이콘 이미지"
+          style="border-radius: 12px"
+        />
+      </div>
+    </div>
+    <aside class="notes">
+      첫 번째, 왜 재료로 AWS를 선택했을까요? 바로 압도적인 안정성과 성숙도
+      때문입니다.
+      <br /><br />
+      저희는 직접 데이터베이스 서버를 설치하고 관리하는 대신, AWS가 제공하는
+      관리형 서비스인 RDS를 사용했습니다. 덕분에 복잡한 DB 설치, 백업, 보안 패치
+      같은 운영 부담에서 벗어나 오직 개발에만 집중할 수 있었습니다. 파일 저장
+      역시 S3라는 강력한 서비스를 활용했습니다.
+      <br /><br />
+      또한, 지금은 작은 규모로 시작하지만, 사용자가 늘어났을 때 Auto Scaling
+      Group 같은 기능을 통해 손쉽게 서버를 증설할 수 있는 유연한 확장 가능성이
+      매력적이었습니다.
+    </aside>
+  </section>
+
+  <section data-menu-title="Why Terraform?">
+    <h3>Why? ② 조립 도구: 왜 Terraform을 선택했는가?</h3>
+    <div style="display: flex; align-items: center; gap: 20px">
+      <div style="flex: 1">
+        <p>
+          AWS라는 좋은 재료를 매번 손으로 조립하는 것은 비효율적입니다. 저희는
+          <strong>코드형 인프라(IaC)</strong> 방식, 그중에서도 Terraform을
+          채택했습니다.
+        </p>
+        <ul>
+          <li class="fragment">
+            <strong>재사용성과 일관성:</strong> VPC, EC2, RDS 등 각 기능을
+            독립적인 <strong>모듈(레고 블록)</strong>로 만들어, 언제 어디서든
+            <strong>오차 없이 동일한 구성</strong>의 인프라를 신속하게 구축할 수
+            있습니다.
+          </li>
+          <li class="fragment">
+            <strong>형상 관리 및 협업:</strong> 모든 인프라 구성이 Git에 코드로
+            남기 때문에, <strong>누가, 언제, 무엇을 변경했는지 추적</strong>하기
+            쉽고 팀원 간의 협업이 원활해집니다.
+          </li>
+          <li class="fragment">
+            <strong>완전 자동화의 기반:</strong> 코드로 관리된다는 것은, GitHub
+            Actions 같은 CI/CD 도구와 연동하여
+            <strong>사람의 실수 없이 배포 전 과정을 자동화</strong>할 수 있다는
+            의미입니다.
+          </li>
+        </ul>
+      </div>
+      <div class="fragment" style="flex: 0.7; text-align: center">
+        <img
+          class="placeholder"
+          src="assets\1-workflow.png"
+          alt="Terraform 모듈 개념도"
+          style="border-radius: 12px"
+        />
+      </div>
+    </div>
+    <aside class="notes">
+      두 번째, 그렇다면 이 AWS라는 재료들을 어떻게 관리했을까요? 저희는
+      Terraform을 사용한 코드형 인프라(IaC) 방식을 채택했습니다.
+      <br /><br />
+      가장 큰 장점은 '재사용성'과 '일관성'입니다. 저희는 VPC, EC2, RDS 등 각
+      기능을 독립적인 모듈, 즉 레고 블록으로 만들었습니다. 이렇게 하면 개발
+      환경이든 운영 환경이든 항상 동일한 구성의 인프라를 오차 없이, 그리고 매우
+      신속하게 구축할 수 있습니다.
+      <br /><br />
+      또한 모든 변경사항이 코드로 남기 때문에 버전 관리가 가능하고, 궁극적으로는
+      GitHub Actions와 연동하여 인프라 변경까지 완전히 자동화하는 기반이 됩니다.
+    </aside>
+  </section>
+</section>

@@ -1,0 +1,75 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  5: 인프라 구축 - 어떻게 코드로 구성했는가?
+  슬라이드입니다. 
+-->
+<section data-menu-title="인프라 구축 (How)">
+  <section data-menu-title="Terraform 구조">
+    <h3>How? ①: 모듈(Module)로 인프라 조립하기</h3>
+    <p>
+      저희는 VPC, EC2, RDS 등 AWS의 각 서비스 단위를 하나의
+      <strong>모듈(Module)</strong>, 즉 재사용 가능한 '레고 블록'으로
+      만들었습니다. <br />그리고 <code>main.tf</code> 라는 최상위 설계도에서 이
+      블록들을 조립해 전체 인프라를 완성합니다.
+    </p>
+    <div
+      style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px"
+    >
+      <div style="flex: 1; text-align: center">
+        <img
+          class="r-stretch placeholder"
+          src="assets\0_PgKqKDKz8vQ5xhPs.jpg"
+          alt="Terraform 디렉토리 구조 다이어그램"
+          style="border-radius: 12px"
+        />
+      </div>
+      <div style="flex: 1.5">
+        <pre><code class="language-hcl" data-line-numbers="3,9,17" data-trim>
+# terraform-aws-fastapi-infra/main.tf
+
+# 1. VPC 모듈 호출 (네트워크 기반 생성)
+module "vpc" {
+  source = "./modules/vpc"
+  # ... vpc 구성에 필요한 변수 전달 ...
+}
+
+# 2. RDS 모듈 호출 (DB 생성)
+module "rds" {
+  source = "./modules/rds"
+  # vpc 모듈의 결과물(VPC ID)을 입력으로 사용
+  vpc_id        = module.vpc.vpc_id
+  db_subnet_ids = module.vpc.private_db_subnet_ids
+  # ...
+}
+
+# 3. EC2 백엔드 모듈 호출 (애플리케이션 서버 생성)
+module "ec2_backend" {
+  source = "./modules/ec2_backend"
+  # vpc, rds 모듈의 결과물을 입력으로 사용
+  vpc_id                 = module.vpc.vpc_id
+  fastapi_database_url   = "postgresql://${module.rds.db_instance_username}..."
+  # ...
+}
+            </code></pre>
+      </div>
+    </div>
+    <aside class="notes">
+      그렇다면 실제로 어떻게 인프라를 코드로 구성했을까요?
+      <br /><br />
+      왼쪽 그림처럼 저희는 기능 단위로 디렉토리를 나누어 각 모듈을 개발했습니다.
+      `modules/vpc`, `modules/rds` 와 같은 각 폴더가 하나의 레고 블록에
+      해당합니다.
+      <br /><br />
+      그리고 오른쪽의 `main.tf` 파일이 바로 이 블록들을 조립하는 설계도입니다.
+      <br />
+      - 먼저 `vpc` 모듈을 호출해서 네트워크의 뼈대를 만듭니다. - 그 다음, `rds`
+      모듈을 호출하면서 방금 만든 `vpc` 모듈의 결과물(VPC ID, 서브넷 ID 등)을
+      입력값으로 전달하여 데이터베이스를 생성합니다. - 마지막으로 `ec2_backend`
+      모듈을 호출하면서, 앞에서 만든 `vpc`와 `rds`의 결과물을 모두 입력값으로
+      전달하여 애플리케이션 서버를 만듭니다.
+      <br /><br />
+      이렇게 모듈 간의 입출력을 명확히 정의함으로써, 복잡한 인프라 구성 요소들이
+      서로 어떻게 의존하고 연결되는지를 코드만으로 명확하게 파악할 수 있습니다.
+    </aside>
+  </section>
+</section>

@@ -1,0 +1,99 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  2: 핵심 기술 스택
+  슬라이드입니다. 
+-->
+<section data-menu-title="기술 스택">
+  <h2 class="r-fit-text">우리를 만든 기술들: 핵심 기술 스택 🧰</h2>
+  <p style="text-align: center">
+    이 프로젝트는 아래의 검증되고 현대적인 기술들의 조합으로 만들어졌습니다.
+  </p>
+  <div
+    style="
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      align-items: flex-start;
+      margin-top: 30px;
+    "
+  >
+    <div
+      class="fragment"
+      data-fragment-index="1"
+      style="flex: 1; text-align: left"
+    >
+      <h4><strong>🖥️ Frontend</strong></h4>
+      <p style="font-size: 0.8em; color: #ccc">(Admin Page)</p>
+      <ul>
+        <li>Streamlit</li>
+        <li>Python</li>
+      </ul>
+    </div>
+
+    <div
+      class="fragment"
+      data-fragment-index="2"
+      style="flex: 1; text-align: left"
+    >
+      <h4><strong>⚙️ Backend</strong></h4>
+      <ul>
+        <li>FastAPI</li>
+        <li>Python</li>
+        <li>SQLAlchemy (ORM)</li>
+        <li>Alembic (Migration)</li>
+      </ul>
+    </div>
+
+    <div
+      class="fragment"
+      data-fragment-index="3"
+      style="flex: 1; text-align: left"
+    >
+      <h4><strong>🧠 Database & AI</strong></h4>
+      <ul>
+        <li>PostgreSQL (on AWS RDS)</li>
+        <li>Google Gemini API</li>
+      </ul>
+    </div>
+
+    <div
+      class="fragment"
+      data-fragment-index="4"
+      style="flex: 1; text-align: left"
+    >
+      <h4><strong>☁️ Infra & DevOps</strong></h4>
+      <ul>
+        <li>AWS (EC2, S3, ALB, VPC...)</li>
+        <li>Docker & Docker Compose</li>
+        <li>Terraform (IaC)</li>
+        <li>GitHub Actions (CI/CD)</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    저희 '멍탐정' 프로젝트는 크게 네 가지 기술 영역으로 구성됩니다.
+    <br /><br />
+    <strong>첫째, 프론트엔드 관리자 페이지입니다.</strong>
+    <br />
+    복잡한 웹 기술 대신, Python 코드만으로 데이터 앱을 빠르게 만들 수 있는
+    Streamlit을 사용해 관리 및 테스트에 필요한 기능을 신속하게 개발했습니다.
+    <br /><br />
+    <strong>둘째, 서비스의 심장인 백엔드입니다.</strong>
+    <br />
+    현대적이고 빠른 FastAPI 프레임워크를 기반으로, 데이터베이스와의 상호작용은
+    SQLAlchemy라는 ORM을 통해, DB 스키마 변경은 Alembic으로 안전하게 관리합니다.
+    <br /><br />
+    <strong>셋째, 데이터와 지능을 담당하는 부분입니다.</strong>
+    <br />
+    데이터베이스는 안정성이 검증된 AWS의 관리형 서비스인 PostgreSQL을 사용하고,
+    핵심 AI 기능은 Google의 강력한 최신 모델인 Gemini API를 활용합니다.
+    <br /><br />
+    <strong
+      >마지막으로, 이 모든 것을 떠받치는 인프라와 배포 자동화입니다.</strong
+    >
+    <br />
+    모든 AWS 인프라는 Terraform을 통해 코드로 관리(IaC)되며, Docker와 GitHub
+    Actions를 통해 개발부터 배포까지의 전 과정이 자동화된 파이프라인으로
+    구축되었습니다.
+  </aside>
+</section>
