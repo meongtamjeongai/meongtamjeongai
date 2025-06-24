@@ -74,10 +74,34 @@
         border: 2px dashed #555;
         background-color: rgba(255, 255, 255, 0.05);
       }
-    </style>
+
+      #part-title-display {
+        position: fixed; /* 화면 기준으로 완벽하게 고정 */
+        top: 25px;
+        right: 35px;
+        font-size: 16px; /* em 대신 px 단위로 고정 크기 지정 */
+        font-weight: bold;
+        color: #ddd;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 5px 12px;
+        border-radius: 15px;
+        z-index: 50; /* 모든 요소 위에 표시되도록 z-index 높게 설정 */
+        
+        /* 부드러운 효과를 위한 트랜지션 */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s, visibility 0.4s;
+    }
+
+    #part-title-display.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+  </style>
   </head>
   <body>
     <div class="reveal">
+      <div id="part-title-display"></div>
       <div class="slides" id="slides-container"></div>
     </div>
 
@@ -157,6 +181,34 @@
         }
         // 모든 슬라이드 파일 로딩이 끝난 후 Reveal.js를 초기화
         initReveal();
+
+        // 1. 파트 제목을 표시할 DOM 요소를 가져옵니다.
+        const partTitleDisplay = document.getElementById('part-title-display');
+
+        /**
+         * 현재 슬라이드를 기반으로 파트 제목을 업데이트하는 함수.
+         * @param {object} event - Reveal.js 이벤트 객체
+         */
+        function updatePartTitle(event) {
+            // 수직 슬라이드를 고려하여, 현재 슬라이드 또는 그 부모에서 'data-part-title' 속성을 찾습니다.
+            const slideWithTitle = event.currentSlide.closest('[data-part-title]');
+            const partTitle = slideWithTitle ? slideWithTitle.dataset.partTitle : '';
+
+            if (partTitle) {
+                // 파트 제목이 있으면, 내용을 채우고 'visible' 클래스를 추가하여 보이게 합니다.
+                partTitleDisplay.textContent = partTitle;
+                partTitleDisplay.classList.add('visible');
+            } else {
+                // 파트 제목이 없으면, 'visible' 클래스를 제거하여 사라지게 합니다.
+                partTitleDisplay.classList.remove('visible');
+            }
+        }
+
+        // 2. 슬라이드가 변경될 때마다 'updatePartTitle' 함수를 호출하도록 이벤트를 등록합니다.
+        Reveal.on('slidechanged', updatePartTitle);
+
+        // 3. 프레젠테이션이 처음 로드되었을 때도 파트 제목이 표시되도록 'ready' 이벤트에도 등록합니다.
+        Reveal.on('ready', updatePartTitle);
       }
 
       /**

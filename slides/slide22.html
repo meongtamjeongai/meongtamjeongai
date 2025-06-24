@@ -1,167 +1,105 @@
 <!-- 
   이 파일은 Reveal.js 기준
-  22: 시연 및 Q&A (링크 버튼 버전)
+  28: Q&A 보충 - Cloudflare vs. Route 53
   슬라이드입니다. 
 -->
-<section data-menu-title="Live Demo">
-  <section data-menu-title="Live Demo">
-    <h2 class="r-fit-text">Live Demo 🎬</h2>
+<section data-part-title="💬 Q&A 보충" data-menu-title="Appendix (DNS)">
+  <section data-menu-title="Cloudflare vs Route 53">
+    <h3>Q&A 보충: 왜 Route 53 대신 Cloudflare DNS를 선택했는가?</h3>
     <p>
-      백문이 불여일견(百聞不如一見). 말로 설명드린 시스템들이<br />실제로 어떻게
-      동작하는지 직접 보여드리겠습니다.
+      AWS 생태계임에도 불구하고, 저희는 DNS 서비스로 Route 53이 아닌
+      Cloudflare를 선택했습니다.<br />
+      이는 <strong>비용, 성능, 그리고 부가 기능</strong> 측면에서 저희
+      프로젝트에 더 큰 이점을 제공했기 때문입니다.
     </p>
-    <div
-      style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px"
-    >
-      <div
-        class="fragment"
-        style="
-          flex: 1;
-          border: 1px solid #444;
-          border-radius: 12px;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-        "
-      >
-        <h4><strong>① 관리자 페이지 (Streamlit)</strong></h4>
-        <a
-          href="https://admin.meong.shop"
-          target="_blank"
-          style="
-            display: flex;
-            flex-grow: 1;
-            font-size: 28px;
-            align-items: center;
-            justify-content: center;
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            margin: 15px 0;
-          "
-        >
-          🔗 관리자 페이지 바로가기
-        </a>
-        <p style="font-size: 0.85em; margin-top: auto">
-          Python 코드만으로 구현된 관리자 페이지에서 사용자 및 페르소나,
-          대화방을 실시간으로 관리하고 테스트하는 모습을 보여드립니다.
-        </p>
-      </div>
-
-      <div
-        class="fragment"
-        style="
-          flex: 1;
-          border: 1px solid #444;
-          border-radius: 12px;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-        "
-      >
-        <h4>
-          <strong>② API 문서<br />(FastAPI + Scalar)</strong>
-        </h4>
-        <a
-          href="https://meong.shop/scalar"
-          target="_blank"
-          style="
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
-            font-size: 28px;
-            justify-content: center;
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            margin: 15px 0;
-          "
-        >
-          📄 API 문서 바로가기
-        </a>
-        <p style="font-size: 0.85em; margin-top: auto">
-          FastAPI가 자동으로 생성한 깔끔하고 인터랙티브한 API 문서를 통해, 실제
-          API를 직접 호출하고 응답을 확인하는 과정을 시연합니다.
-        </p>
-      </div>
-
-      <div
-        class="fragment"
-        style="
-          flex: 1;
-          border: 1px solid #444;
-          border-radius: 12px;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-        "
-      >
-        <h4><strong>③ 인프라 변경 (Terraform)</strong></h4>
-        <a
-          href="https://app.terraform.io/app/meongtamjeongai/workspaces/meongtamjeongai-devops"
-          target="_blank"
-          style="
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
-            justify-content: center;
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 24px;
-            color: white;
-            font-weight: bold;
-            margin: 15px 0;
-          "
-        >
-          ☁️ Terraform Cloud 바로가기
-        </a>
-        <p style="font-size: 0.85em; margin-top: auto">
-          인프라 코드 변경 시, Terraform Cloud에서 어떻게 Plan/Apply가
-          실행되는지 실제 워크스페이스에서 보여드립니다.
-        </p>
-      </div>
-    </div>
+    <table style="width: 100%; margin-top: 20px; font-size: 0.8em">
+      <thead>
+        <tr style="border-bottom: 2px solid #555">
+          <th style="width: 20%">구분</th>
+          <th style="width: 40%; color: #88b4ff">✅ Cloudflare (채택)</th>
+          <th style="width: 40%">AWS Route 53 (대안)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="fragment">
+          <td><strong>💰 비용</strong></td>
+          <td>
+            <strong>기본 DNS 및 DDoS 방어 무료.</strong><br />소규모 프로젝트에
+            비용 부담 없음.
+          </td>
+          <td>
+            호스팅 영역 및 쿼리 당 비용 발생.<br />작은 트래픽에도 비용이
+            청구됨.
+          </td>
+        </tr>
+        <tr class="fragment">
+          <td><strong>🚀 성능</strong></td>
+          <td>
+            <strong>전 세계적으로 가장 빠른 DNS 응답 속도</strong>를 제공하는
+            CDN 네트워크 보유.
+          </td>
+          <td>안정적이지만, 순수 DNS 속도는 Cloudflare 대비 열세일 수 있음.</td>
+        </tr>
+        <tr class="fragment">
+          <td><strong>🛡️ 보안 및 부가 기능</strong></td>
+          <td>
+            <ul>
+              <li><strong>강력한 무료 DDoS 방어 및 WAF.</strong></li>
+              <li>프록시(주황색 구름)로 <strong>실제 서버 IP 숨김.</strong></li>
+              <li>
+                <strong>Cloudflare Access</strong>로 코드 없이 제로 트러스트
+                보안 구현.
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>
+                AWS Shield, WAF 등 별도 서비스 연동 필요. (추가 비용 및 설정
+                복잡도 증가)
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="fragment" style="margin-top: 20px">
+      <strong>결론:</strong> Route 53의 AWS 서비스 간 통합 이점도 분명하지만,
+      저희 프로젝트 규모에서는 Cloudflare가 제공하는
+      <strong
+        >무료 정책, 압도적인 성능, 그리고 클릭 몇 번으로 구현되는 강력한 추가
+        보안 기능</strong
+      >의 가치가 더 크다고 판단했습니다.
+    </p>
     <aside class="notes">
-      지금까지 설명드린 내용을 바탕으로, 저희가 구축한 세 가지 핵심 결과물을
-      직접 보여드리겠습니다.
+      네, '왜 AWS의 Route 53 대신 Cloudflare를 사용했는가?'는 아주 좋은
+      질문입니다. 저희의 결정 과정을 설명드리겠습니다.
       <br /><br />
-      <strong>(첫 번째 링크를 클릭하며)</strong>
-      <br />
-      먼저 Streamlit으로 만든 관리자 페이지입니다. 보시는 것처럼, 복잡한
-      프론트엔드 개발 없이도 데이터 관리와 기능 테스트에 필요한 내부 도구를
-      Python만으로 빠르고 직관적으로 만들 수 있었습니다.
+      물론 모든 인프라를 AWS로 통일했다면 Route 53이 더 매끄럽게 연동되는 부분도
+      있습니다. 예를 들어, 인증서 발급 시 DNS 레코드 자동 등록 같은 부분은 더
+      편했을 겁니다.
       <br /><br />
-      <strong>(두 번째 링크를 클릭하며)</strong>
-      <br />
-      다음은 FastAPI가 자동으로 생성해준 API 문서입니다. 저희는 Scalar UI를
-      적용하여 더 깔끔한 문서를 만들었습니다. 여기서 실제 API를 직접 테스트해볼
-      수 있어 프론트엔드 개발자와의 협업에 정말 큰 도움이 되었습니다.
+      하지만 저희는 세 가지 측면에서 Cloudflare가 더 큰 이점을 제공한다고
+      판단했습니다.
       <br /><br />
-      <strong>(세 번째 링크를 클릭하며)</strong>
-      <br />
-      마지막으로 Terraform Cloud 워크스페이스입니다. GitHub에 코드를 푸시하면,
-      바로 이곳에서 Plan과 Apply가 실행되며 모든 인프라 변경 이력이 기록됩니다.
-      이를 통해 모든 변경 사항을 추적하고 안정적으로 관리할 수 있습니다.
+      <strong>첫째, 비용입니다.</strong> 소규모 프로젝트에서 Route 53은 쿼리당
+      비용이 계속 발생하지만, Cloudflare의 핵심적인 DNS와 DDoS 방어 기능은
+      무료입니다. 이는 비용에 민감한 프로젝트에 매우 큰 장점입니다. <br /><br />
+      <strong>둘째, 성능입니다.</strong> Cloudflare는 전 세계적으로 가장 빠른
+      DNS 응답 속도를 자랑하는 강력한 CDN 네트워크를 기반으로 동작합니다. 이는
+      곧 사용자가 저희 서비스에 더 빨리 접속할 수 있음을 의미합니다.
       <br /><br />
-      <strong>(시연 종료 후, 슬라이드로 복귀)</strong>
-      <br />
-      시연은 여기까지입니다. 지금까지 저희 '멍탐정' 프로젝트의 아키텍처 발표를
-      들어주셔서 감사합니다. 이제 질문이 있으시면 편하게 해주시기 바랍니다.
+      <strong
+        >마지막으로, 가장 결정적인 이유였던 보안 및 부가 기능입니다.</strong
+      >
+      Cloudflare는 '주황색 구름'으로 표현되는 프록시 기능을 켜는 것만으로 저희의
+      실제 서버 IP 주소를 숨겨주고, 기본적인 DDoS 공격을 막아줍니다. 특히, 앞서
+      시연에서 보여드린 <strong>'Cloudflare Access'</strong> 기능은, 저희가
+      관리자 페이지를 위한 별도의 로그인 코드를 한 줄도 작성하지 않고도 강력한
+      접근 제어를 구현할 수 있게 해준 핵심적인 기능이었습니다. <br /><br />
+      이러한 이유로, 저희는 AWS 서비스와의 네이티브한 통합이라는 이점보다는,
+      Cloudflare가 제공하는 비용, 성능, 그리고 강력한 부가 기능의 가치가 저희
+      프로젝트에 더 적합하다고 판단하여 최종 선택하게 되었습니다.
     </aside>
-  </section>
-
-  <section data-background-color="#222">
-    <h2>감사합니다</h2>
   </section>
 </section>
