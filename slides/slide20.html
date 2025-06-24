@@ -1,0 +1,139 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  20: 회고 - 개발 및 배포 환경 (레이아웃 수정 버전)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Experience (Dev Env)">
+  <section data-menu-title="Dev & Deploy Env">
+    <h3>How? & Experience: 일관된 개발 및 배포 환경 구축 🐳</h3>
+    <p>
+      "제 컴퓨터에선 잘 됐는데..." 라는 문제를 원천 차단하기 위해,
+      <strong>Docker</strong>를 기반으로 개발부터 운영까지
+      <strong>모든 환경을 완벽하게 통일</strong>했습니다.
+    </p>
+    <!-- justify-content: center; 속성을 추가하여 중앙 정렬 -->
+    <div
+      style="
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+      "
+    >
+      <div
+        class="fragment"
+        style="
+          flex: 0 1 30%;
+          border: 1px solid #444;
+          border-radius: 12px;
+          padding: 15px;
+        "
+      >
+        <h4><strong>① Dev Container</strong></h4>
+        <p style="font-size: 0.8em">클릭 한 번으로 개발 환경 통일</p>
+        <pre><code class="json" style="max-height: 250px;" data-trim>
+// .devcontainer/devcontainer.json
+{
+  "name": "멍탐정 Backend",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff"
+      ]
+    }
+  },
+  "postCreateCommand": "pip install -r dev-reqs.txt"
+}
+                </code></pre>
+      </div>
+      <div
+        class="fragment"
+        style="
+          flex: 0 1 30%;
+          border: 1px solid #444;
+          border-radius: 12px;
+          padding: 15px;
+        "
+      >
+        <h4><strong>② Docker Compose</strong></h4>
+        <p style="font-size: 0.8em">명령어 하나로 모든 서비스 실행</p>
+        <pre><code class="yaml" style="max-height: 250px;" data-trim>
+# docker-compose.yml
+services:
+  app: # FastAPI 백엔드
+    build: .
+    ports: ["8000:80"]
+    depends_on: [db]
+  
+  admin-app: # Streamlit 관리자 페이지
+    build: ./admin
+    ports: ["8501:8501"]
+
+  db: # PostgreSQL 데이터베이스
+    image: postgres:15
+    environment: [...]
+</code></pre>
+      </div>
+      <div
+        class="fragment"
+        style="
+          flex: 0 1 30%;
+          border: 1px solid #444;
+          border-radius: 12px;
+          padding: 15px;
+        "
+      >
+        <h4><strong>③ Dockerfile</strong></h4>
+        <p style="font-size: 0.8em">개발과 운영 환경의 완벽한 일치</p>
+        <pre><code class="dockerfile" style="max-height: 250px;" data-trim>
+# Dockerfile
+FROM python:3.13-slim
+
+WORKDIR /workspace
+
+# 의존성 설치
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# 소스 코드 복사
+COPY . .
+
+# Gunicorn으로 앱 실행 (운영)
+CMD ["gunicorn", ...]
+                </code></pre>
+      </div>
+    </div>
+    <aside class="notes">
+      프로젝트를 진행하며 저희가 가장 중요하게 생각한 것 중 하나는, '내
+      컴퓨터에서는 되는데, 서버에서는 안 돼요' 같은 고질적인 문제를 없애는
+      것이었습니다. 이를 위해 저희는 Docker를 기반으로 한 세 가지 기술을
+      적극적으로 활용했습니다.
+      <br /><br />
+      <strong>첫째, Dev Container 입니다.</strong>
+      왼쪽 코드처럼, 프로젝트에 필요한 VS Code 확장 프로그램이나 실행 명령어들을
+      미리 정의해두면, 새로운 팀원이 와도 버튼 클릭 한 번으로 1분 안에 모든 개발
+      환경 설정이 완료됩니다.
+      <br /><br />
+      <strong>둘째, Docker Compose 입니다.</strong>
+      가운데 코드처럼, 저희 서비스에 필요한 백엔드, 관리자 페이지,
+      데이터베이스를 각각의 서비스로 정의합니다. 그리고 터미널에서
+      `docker-compose up` 이라는 명령어 하나만 입력하면, 이 모든 서비스가 한
+      번에 실행되어 로컬에서도 실제 운영과 유사한 환경에서 통합 테스트를 할 수
+      있습니다.
+      <br /><br />
+      <strong>셋째, Dockerfile 입니다.</strong>
+      오른쪽 코드는 저희 백엔드 앱의 '설계도'입니다. 핵심은,
+      <strong
+        >로컬 개발 환경을 구성할 때나 실제 운영 서버에 배포할 때나, 바로 이
+        동일한 Dockerfile을 사용한다</strong
+      >는 점입니다. 덕분에 개발과 운영 환경의 차이로 인해 발생할 수 있는 예측
+      불가능한 오류를 원천적으로 방지할 수 있었습니다. <br /><br />
+      이 세 가지 기술의 조합은 저희 팀의 개발 생산성을 극대화하고, 배포 과정의
+      안정성을 크게 높여주었습니다.
+    </aside>
+  </section>
+</section>

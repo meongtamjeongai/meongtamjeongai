@@ -20,7 +20,7 @@
 
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/theme/black.css"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/theme/night.css"
       id="theme"
     />
 
@@ -81,11 +81,30 @@
       <div class="slides" id="slides-container"></div>
     </div>
 
+    <!-- Font awesome is required for the chalkboard plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom controls plugin is used to for opening and closing annotation modes. -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/plugin.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/style.css"
+    />
+    <!-- Chalkboard plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/plugin.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/style.css"
+    />
+
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@2.1.0/plugin/mermaid/mermaid.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.6.0/plugin/mermaid/mermaid.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/zoom/zoom.min.js"></script>
 
@@ -154,13 +173,39 @@
           center: true, // 슬라이드를 수직으로 가운데 정렬
 
           // 사용할 플러그인 목록
-          plugins: [RevealHighlight, RevealNotes, RevealMermaid, RevealMenu, RevealZoom],
+          plugins: [
+            RevealHighlight,
+            RevealNotes,
+            RevealMermaid,
+            RevealMenu,
+            RevealZoom,
+            RevealChalkboard,
+            RevealCustomControls,
+          ],
 
           // 슬라이드 번호 표시 형식 (c: 현재, t: 전체)
           slideNumber: "c/t",
 
-          // Mermaid.js(다이어그램) 플러그인 설정
-          mermaid: { version: "10.9.1" },
+          customcontrols: {
+            controls: [
+              {
+                icon: '<i class="fa fa-pen-square"></i>',
+                title: "Toggle chalkboard (B)",
+                action: "RevealChalkboard.toggleChalkboard();",
+              },
+              {
+                icon: '<i class="fa fa-pen"></i>',
+                title: "Toggle notes canvas (C)",
+                action: "RevealChalkboard.toggleNotesCanvas();",
+              },
+            ],
+          },
+
+          mermaid: {},
+
+          chalkboard: {
+            // add configuration here
+          },
 
           // Menu 플러그인 설정
           menu: {

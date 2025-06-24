@@ -1,0 +1,59 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  13: 백엔드 - 데이터베이스 ERD (이미지 표시 수정)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Backend (ERD)">
+  <section data-menu-title="Database ERD">
+    <h3>What? 데이터 구조의 심장: 데이터베이스 ERD 🧬</h3>
+    <p style="font-size: 34px">
+      모든 서비스 데이터는 체계적으로 설계된 관계형 데이터베이스(PostgreSQL)에
+      저장됩니다.<br />
+      아래는 저희 '멍탐정' 서비스의 핵심 데이터 모델 관계도(ERD)입니다.
+    </p>
+    <div
+      style="
+        margin-top: 15px;
+        text-align: center;
+        height: 105vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <img
+        src="assets/erd.png"
+        alt="멍탐정 프로젝트 데이터베이스 ERD"
+        style="
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          background-color: white;
+          border-radius: 12px;
+          padding: 10px;
+        "
+      />
+    </div>
+    <aside class="notes">
+      지금 보시는 다이어그램은 저희 서비스 데이터의 뼈대, 바로 데이터베이스 모델
+      관계도(ERD)입니다. 각 테이블이 어떤 역할을 하는지 핵심만 짚어드리겠습니다.
+      <br /><br />
+      - <strong>users:</strong> 모든 사용자의 기본 정보를 저장하는 가장 중심이
+      되는 테이블입니다. - <strong>social_accounts:</strong> 사용자가 어떤 소셜
+      로그인(구글, 카카오 등)을 통해 가입했는지 연결 정보를 저장합니다. 한 명의
+      사용자는 여러 소셜 계정을 가질 수 있습니다. -
+      <strong>api_keys:</strong> 관리자나 외부 서비스가 저희 API를 안전하게
+      사용할 수 있도록 발급된 API 키 정보를 관리합니다. <br /><br />
+      - <strong>personas:</strong> '금융감독원 직원', '경찰' 등 AI 챗봇의 역할을
+      정의하는 페르소나 정보를 담습니다. - <strong>conversations:</strong> 어떤
+      사용자가 어떤 페르소나와 나눈 대화방의 목록을 관리합니다. -
+      <strong>messages:</strong> 각 대화방에서 오고 간 모든 메시지(사용자, AI)가
+      순서대로 저장됩니다. <br /><br />
+      - <strong>phishing_categories:</strong> '기관 사칭', '스미싱' 등 피싱의
+      종류를 정의합니다. - <strong>phishing_cases:</strong> 각 피싱 종류에
+      해당하는 구체적인 시나리오와 사례를 저장합니다. <br /><br />
+      이처럼 각 테이블은 하나의 명확한 책임만 가지도록 설계되었고, 테이블 간의
+      관계를 통해 데이터의 일관성과 무결성을 보장합니다.
+    </aside>
+  </section>
+</section>

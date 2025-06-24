@@ -1,0 +1,146 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  10: 백엔드 - DB 연동 기술: ORM과 마이그레이션 (코드 중심 수정 버전)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Backend (ORM & Migration)">
+  <section data-menu-title="Why ORM?">
+    <h3>Why? DB 작업: 왜 SQL 대신 ORM을 사용했는가? 🐘</h3>
+    <p>
+      데이터베이스 작업에 순수 SQL 쿼리를 직접 작성하는 대신,
+      <strong>ORM(객체-관계 매핑)</strong> 라이브러리인
+      <strong>SQLAlchemy</strong>를 사용했습니다.
+    </p>
+    <div style="display: flex; align-items: center; gap: 20px">
+      <div style="flex: 1">
+        <p>
+          <strong>SQLAlchemy (ORM)</strong>는 데이터베이스의 테이블을 Python의
+          '객체(Object)'처럼 다룰 수 있게 해주는 번역기입니다.
+        </p>
+        <ul>
+          <li class="fragment">
+            <strong>생산성 향상:</strong> 복잡한 SQL 쿼리 대신, 익숙한 Python
+            코드로 DB 작업을 처리하여 개발 속도를 높였습니다.
+          </li>
+          <li class="fragment">
+            <strong>DB 비종속성:</strong> 코드를 거의 바꾸지 않고도
+            PostgreSQL에서 MySQL 등 다른 종류의 데이터베이스로 쉽게 전환할 수
+            있는 유연성을 확보했습니다.
+          </li>
+          <li class="fragment">
+            <strong>안전성:</strong> SQL Injection과 같은 일반적인 보안
+            공격으로부터 애플리케이션을 더 안전하게 보호해줍니다.
+          </li>
+        </ul>
+      </div>
+      <div class="fragment" style="flex: 1">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>Python 객체 ↔️ SQL 번역 예시</strong>
+        </p>
+        <pre><code class="python" data-trim>
+# Python Code (ORM)
+new_user = User(name="멍탐정", email="admin@meong.shop")
+db.add(new_user)
+db.commit()
+
+# --- ORM이 번역 --- #
+
+# SQL Query
+INSERT INTO users (name, email)
+VALUES ('멍탐정', 'admin@meong.shop');
+            </code></pre>
+      </div>
+    </div>
+    <aside class="notes">
+      백엔드가 데이터베이스와 통신할 때, 저희는 SQL 쿼리문을 직접 작성하지
+      않았습니다. 대신 SQLAlchemy라는 ORM, 즉 '객체-관계 매핑' 기술을
+      사용했습니다.
+      <br /><br />
+      ORM은 오른쪽 코드처럼, 데이터베이스의 테이블을 마치 파이썬의 '객체'처럼
+      다룰 수 있게 해주는 똑똑한 번역기입니다.
+      <br /><br />
+      "새로운 사용자를 추가해줘" 라는 요청을 처리할 때, 복잡한 INSERT SQL 구문을
+      외울 필요 없이, 그저 User라는 파이썬 객체를 만들어 DB에 추가하라는 코드만
+      작성하면, ORM이 알아서 올바른 SQL 쿼리로 번역해서 실행해줍니다.
+      <br /><br />
+      이를 통해 저희는 개발 생산성을 높이고, 특정 데이터베이스 기술에 종속되지
+      않는 유연한 코드를 작성할 수 있었습니다.
+    </aside>
+  </section>
+
+  <section data-menu-title="Why Migration?">
+    <h3>How? DB 관리: "Alembic"으로 안전하게 DB 변경하기</h3>
+    <p>
+      서비스 운영 중 DB 구조를 변경해야 할 때, <strong>Alembic</strong>을
+      사용하여 모든 변경 이력을 코드로 안전하게 관리하고 적용합니다.
+    </p>
+    <div style="display: flex; align-items: stretch; gap: 20px">
+      <div style="flex: 1">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>① 모델 코드 변경 (models/user.py)</strong>
+        </p>
+        <pre><code class="python" data-line-numbers="5" data-trim>
+# 1. User 모델에 'nickname' 필드 추가
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nickname: Mapped[str] = mapped_column(String(100), nullable=True) # <-- 이 줄 추가
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    # ...
+        </code></pre>
+        <p class="fragment" style="text-align: center; margin-top: 10px">⬇️</p>
+        <p class="fragment" style="text-align: center">
+          <code
+            >$ alembic revision --autogenerate -m "Add nickname to users"</code
+          >
+        </p>
+      </div>
+      <div class="fragment" style="flex: 1.5">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>② 자동 생성된 마이그레이션 스크립트</strong>
+        </p>
+        <pre><code class="python" data-line-numbers="11-13|17-19" data-trim>
+# versions/xyz_add_nickname_to_users.py
+"""Add nickname to users
+
+Revision ID: xyz...
+Revises: ...
+Create Date: ...
+"""
+from alembic import op
+import sqlalchemy as sa
+
+# DB를 업그레이드할 때 실행될 함수
+def upgrade() -> None:
+    op.add_column('users', 
+        sa.Column('nickname', sa.String(length=100), nullable=True)
+    )
+
+# DB를 다운그레이드할 때 실행될 함수
+def downgrade() -> None:
+    op.drop_column('users', 'nickname')
+
+        </code></pre>
+      </div>
+    </div>
+    <aside class="notes">
+      만약 User 테이블에 '닉네임' 컬럼을 새로 추가해야 한다면 어떻게 할까요?
+      저희는 Alembic을 통해 이 과정을 안전하게 처리합니다.
+      <br /><br />
+      1. <strong>코드 수정:</strong> 먼저 왼쪽 코드처럼, 저희는 파이썬 User 모델
+      코드에 `nickname` 필드를 한 줄 추가합니다. <br /><br />
+      2. <strong>스크립트 생성:</strong> 그 다음 터미널에 "Alembic, 변경사항
+      감지해서 스크립트 만들어줘" 라는 명령어를 실행합니다. 그러면 Alembic이
+      코드와 실제 DB를 비교해서, 오른쪽과 같이 `nickname` 컬럼을
+      추가(`add_column`)하는 `upgrade` 함수와, 필요시 변경을 되돌리기 위해
+      컬럼을 삭제(`drop_column`)하는 `downgrade` 함수가 포함된 파이썬 스크립트
+      파일을 자동으로 생성해줍니다. <br /><br />
+      3. <strong>DB 적용:</strong> 마지막으로 "Alembic, 최신 버전으로
+      업그레이드해줘" (`alembic upgrade head`) 명령어를 실행하면, Alembic이 이
+      스크립트의 `upgrade` 함수를 실행하여 모든 개발자의 DB와 운영 DB에 안전하고
+      동일하게 `nickname` 컬럼을 추가합니다. <br /><br />
+      이처럼 Alembic을 통해 저희는 모든 데이터베이스의 변경 이력을 코드로
+      관리하고, 팀원 모두가 동일한 DB 구조를 유지하며 협업할 수 있었습니다.
+    </aside>
+  </section>
+</section>

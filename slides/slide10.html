@@ -1,0 +1,54 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  10: 백엔드 - 주요 데이터 흐름: 채팅 API 호출 (Mermaid 수정 버전)
+  슬라이드입니다. 
+-->
+
+<section data-menu-title="Backend (Chat Flow)">
+  <section data-menu-title="Chat API Flow">
+    <h3>How? 주요 데이터 흐름 ②: AI 채팅 API 호출 💬</h3>
+    <p>
+      사용자가 메시지를 보내면, 백엔드는 <strong>대화의 맥락(Context)</strong>을
+      파악하여 <strong>Gemini AI</strong>에 전달하고, 그 응답을 받아 사용자에게
+      전달하는 '오케스트레이터' 역할을 수행합니다.
+    </p>
+    <pre class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+sequenceDiagram
+    participant C as 📱 Client
+    participant B as ⚙️ Backend (FastAPI)
+    participant DB as 🐘 Database
+    participant AI as ✨ Gemini AI API
+
+    C->>B: 1. 메시지 전송 (JWT와 함께)<br><code>POST /api/v1/conversations/{id}/messages</code>
+    B->>B: 2. JWT 검증, 사용자 확인 (DI)
+    B->>DB: 3. 이전 대화 기록 조회
+    DB->>B: 4. 대화 기록 반환
+    B->>AI: 5. 프롬프트 + 대화 기록 + 새 메시지 전달
+    AI->>B: 6. 구조화된 AI 응답 생성<br>(답변, 추천 질문 등)
+    B->>DB: 7. 새 메시지(사용자, AI) 저장
+    DB->>B: 8. 저장 완료
+    B->>C: 9. 최종 AI 응답 전달
+    </pre>
+    <aside class="notes">
+      사용자 인증이 완료되었다면, 이제 핵심 기능인 AI 채팅은 어떻게
+      이루어질까요?
+      <br /><br />
+      1. 먼저 클라이언트는 사용자가 입력한 메시지를 '멍탐정 JWT'와 함께 백엔드
+      서버로 보냅니다. 2. 저희 백엔드는 가장 먼저 JWT를 검증해서, "아, 이
+      사용자는 인증된 OOO이구나" 하고 신원을 확인합니다. 3. 그 다음, AI가 대화의
+      맥락을 이해할 수 있도록, 데이터베이스에서 이 대화방의
+      <strong>이전 대화 기록</strong>을 모두 가져옵니다. 4. 이렇게 준비된
+      <strong>(페르소나 지시사항 + 이전 대화 기록 + 사용자 새 메시지)</strong>
+      세트를 한 번에 묶어 Google Gemini AI API에 전달합니다. 5. Gemini AI는 이
+      모든 정보를 바탕으로 다음 답변을 생성하고, 저희가 요청한 JSON 형식에 맞춰
+      구조화된 결과(AI의 답변, 다음 추천 질문 등)를 돌려줍니다. 6. 마지막으로,
+      저희 백엔드는 방금 사용자가 보낸 메시지와 AI가 생성한 응답을 모두
+      데이터베이스에 차곡차곡 기록하고, 최종 응답을 클라이언트에게 전달합니다.
+      <br /><br />
+      이처럼 저희 백엔드는 단순히 요청을 전달만 하는 것이 아니라, 여러
+      서비스(DB, AI) 사이에서 데이터를 조율하고 흐름을 지휘하는
+      '오케스트레이터'의 역할을 충실히 수행하고 있습니다.
+    </aside>
+  </section>
+</section>

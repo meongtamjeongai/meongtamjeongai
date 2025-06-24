@@ -1,0 +1,58 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  12: 백엔드 - AWS S3 연동 (How)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Backend (S3 Flow)">
+  <section data-menu-title="S3 Upload Flow">
+    <h3>How? 주요 데이터 흐름 ③: AWS S3 파일 업로드 ☁️</h3>
+    <p>
+      이미지 같은 대용량 파일은 백엔드 서버를 거치지 않습니다.<br />
+      대신, 클라이언트가 S3에 직접 파일을 올릴 수 있는
+      <strong>임시 출입증(Presigned URL)</strong>을 발급하여 서버 부하를 줄이고
+      보안을 강화했습니다.
+    </p>
+    <div class="mermaid" style="margin-top: 15px">
+      <pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'primaryColor': '#642' }}}%%
+sequenceDiagram
+    participant C as 📱 Client
+    participant B as ⚙️ Backend (FastAPI)
+    participant S3 as 💾 AWS S3
+
+    C->>B: 1. "이미지 올릴게요!"<br>파일 이름, 종류 전달<br><code>POST /storage/presigned-url/upload</code>
+    B->>S3: 2. Presigned URL (임시 업로드 주소) 요청
+    S3-->>B: 3. 1시간 유효한 업로드 전용 URL 발급
+    B-->>C: 4. Presigned URL과 S3 Key 전달
+    
+    C->>S3: 5. 발급받은 URL로 실제 이미지 파일 직접 업로드 (PUT)
+    S3-->>C: 6. ✅ 업로드 성공
+    
+    C->>B: 7. "업로드 완료했어요!"<br>S3 Key와 함께 프로필 정보 업데이트 요청<br><code>PUT /users/me</code>
+    B->>B: 8. 사용자 정보에 S3 Key 저장
+    B-->>C: 9. 프로필 업데이트 완료
+</pre>
+    </div>
+    <aside class="notes">
+      사용자가 프로필 사진 같은 이미지를 업로드할 때는 어떻게 처리될까요? 만약
+      모든 이미지 파일이 저희 백엔드 서버를 거쳐 간다면, 서버에 큰 부담이 될
+      겁니다.
+      <br /><br />
+      그래서 저희는 더 똑똑한 방식을 사용합니다.
+      <br /><br />
+      1. 먼저 클라이언트가 "나 'my_avatar.png' 라는 이미지 올릴 거야" 라고
+      백엔드에 알려줍니다. 2. 백엔드는 이 요청을 받고, AWS S3(파일 저장소)에 "이
+      사용자가 곧 이 위치에 파일을 올릴 테니, 1시간 동안만 유효한 임시 업로드
+      주소를 만들어줘" 라고 요청합니다. 이것이 바로 'Presigned URL'입니다. 3.
+      S3는 암호화된 임시 주소를 만들어 백엔드에게 전달하고, 백엔드는 이를 다시
+      클라이언트에게 전달합니다. 4. 이제 클라이언트는 저희 백엔드를 거치지 않고,
+      <strong>발급받은 임시 주소로 실제 이미지 파일을 S3에 직접 업로드</strong
+      >합니다. 5. 업로드가 성공하면, 클라이언트는 "나 아까 그 파일 업로드 다
+      했어. 내 프로필 이미지로 저장해줘" 라고 파일의 최종 위치 정보(S3 Key)와
+      함께 다시 백엔드에 요청합니다. 6. 그러면 백엔드는 그제서야 데이터베이스에
+      해당 사용자의 프로필 이미지 정보만 업데이트합니다. <br /><br />
+      이 방식을 통해 저희 백엔드 서버는 대용량 파일 처리 부담에서 완전히 벗어나,
+      오직 핵심 로직 처리에만 집중할 수 있게 되어 훨씬 효율적이고 안전합니다.
+    </aside>
+  </section>
+</section>

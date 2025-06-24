@@ -1,0 +1,90 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  14: 백엔드 - Gunicorn을 이용한 워커 관리 (Why & How)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Backend (Gunicorn)">
+  <section data-menu-title="Why Gunicorn?">
+    <h3>Gunicorn으로 워커(Worker) 관리하기 👷</h3>
+    <p>
+      FastAPI의 내장 서버(Uvicorn)는 단일 프로세스로 동작합니다. 이는
+      <strong>CPU 코어가 여러 개라도 하나밖에 사용하지 못함</strong>을
+      의미합니다.<br />
+      저희는 <strong>Gunicorn</strong>을 '매니저'로 도입하여, 여러 개의 Uvicorn
+      '워커'를 관리함으로써 서버 자원을 최대한 활용했습니다.
+    </p>
+    <div
+      style="display: flex; align-items: center; gap: 20px; margin-top: 15px"
+    >
+      <div style="flex: 1">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>Before (Uvicorn 단독)</strong>
+        </p>
+        <div class="mermaid">
+          <pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'primaryColor': '#522' }}}%%
+graph TD
+    subgraph "EC2 Instance (CPU 1개)"
+        U[Uvicorn Worker]
+    end
+    ALB(ALB) --> U
+                    </pre
+          >
+        </div>
+      </div>
+      <div style="flex: 1">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>After (Gunicorn + Uvicorn) (채택)</strong>
+        </p>
+        <div class="mermaid">
+          <pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'primaryColor': '#252' }}}%%
+graph TD
+    subgraph "EC2 Instance (CPU 1개)"
+        G(Gunicorn Manager)
+        subgraph "Workers"
+            W1[Uvicorn Worker 1]
+            W2[Uvicorn Worker 2]
+        end
+        G --> W1
+        G --> W2
+    end
+    ALB(ALB) --> G
+                    </pre
+          >
+        </div>
+      </div>
+    </div>
+    <p class="fragment" style="font-size: 0.9em; margin-top: 15px">
+      t2.micro (vCPU 1개) 같은 저사양 환경에서도
+      <strong>(2 * CPU 코어 수) + 1</strong> 공식에 따라 2~3개의 워커를
+      실행하면, 하나의 워커가 예상치 못하게 멈춰도
+      <strong>Gunicorn이 자동으로 되살려주어</strong> 서비스 안정성이 크게
+      향상됩니다.
+    </p>
+    <aside class="notes">
+      저희 백엔드 배포의 마지막 퍼즐 조각은 바로 Gunicorn입니다.
+      <br /><br />
+      FastAPI를 개발할 때 사용하는 내장 서버(Uvicorn)는 그 자체로 매우
+      훌륭하지만, 딱 하나의 프로세스만 실행하는 한계가 있습니다. 이는 CPU 코어가
+      8개든 16개든 딱 하나만 사용한다는 의미입니다.
+      <br /><br />
+      저희는 이를 해결하기 위해 '프로세스 매니저'인 <strong>Gunicorn</strong>을
+      도입했습니다. Gunicorn은 여러 개의 Uvicorn 프로세스, 즉 '워커'를 생성하고
+      관리하는 감독관 역할을 합니다. <br /><br />
+      - 외부에서 들어온 요청(ALB로부터)은 먼저 Gunicorn 매니저가 받습니다. -
+      Gunicorn은 현재 가장 한가한 워커에게 그 요청을 분배합니다. - 만약 어떤
+      워커가 알 수 없는 이유로 죽어버리면, Gunicorn이 이를 즉시 감지하고 새로운
+      워커를 되살려줍니다.
+      <br /><br />
+      이 구조는 저희가 사용한
+      <strong
+        >t2.micro 인스턴스처럼 vCPU가 1개인 저사양 환경에서도 특히 유용</strong
+      >합니다. 보통 (2 * CPU 코어 수) + 1 공식을 따라 2~3개의 워커를 띄워두는데,
+      이렇게 하면 하나의 워커에 문제가 생겨도 다른 워커가 요청을 처리할 수 있어
+      서비스 중단을 막을 수 있습니다. 즉,
+      <strong>최소한의 자원으로 최대한의 안정성</strong>을 확보하는 핵심 전략인
+      셈입니다.
+    </aside>
+  </section>
+</section>
