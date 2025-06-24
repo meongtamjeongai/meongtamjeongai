@@ -11,7 +11,7 @@
     <div style="margin: 24px 0; text-align: center">
       <img
         class="r-stretch placeholder"
-        src="assets/terraform.png"
+        src="assets/slide4-1.png"
         style="border-radius: 12px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08)"
       />
     </div>
@@ -66,7 +66,7 @@
       <div class="fragment" style="flex: 0.7; text-align: center">
         <img
           class="placeholder"
-          src="assets\aws.jpeg"
+          src="assets/slide4-3.jpeg"
           alt="AWS 관리형 서비스 아이콘 이미지"
           style="border-radius: 12px"
         />
@@ -84,6 +84,54 @@
       또한, 지금은 작은 규모로 시작하지만, 사용자가 늘어났을 때 Auto Scaling
       Group 같은 기능을 통해 손쉽게 서버를 증설할 수 있는 유연한 확장 가능성이
       매력적이었습니다.
+    </aside>
+  </section>
+
+  <section data-menu-title="AWS Cost-Effectiveness">
+    <h3 style="font-size: 42px">Why? ② AWS로 어떻게 저비용 고효율을 달성했는가? 💸</h3>
+    <div style="display: flex; align-items: center; gap: 20px; margin-top: 20px;">
+      <div style="flex: 1.2;">
+        <p>
+          고가의 관리형 서비스 대신 <strong>프리티어(Free Tier)를 최대한 활용</strong>하고, 비용이 발생하는 서비스는 의도적으로 회피하여 운영 비용을 최소화했습니다.
+        </p>
+        <ul>
+          <li class="fragment">
+            <strong>월 1만원 이하 운영:</strong> 실제 청구된 비용으로, 커피 한두 잔 값으로 고효율 인프라를 운영하고 있습니다.
+          </li>
+          <li class="fragment">
+            <strong>고비용 서비스 회피:</strong> 기본적으로 비용이 발생하는 EKS, NAT Gateway, 고정 IP(Elastic IP) 등의 서비스를 사용하지 않고, 더 저렴한 대안을 찾아 적용했습니다.
+          </li>
+           <li class="fragment">
+            <strong>핵심에 집중하는 아키텍처:</strong> 프리티어 내에서 제공되는 EC2, S3, RDS 등의 핵심 서비스만으로 전체 시스템을 구축하여, 비용 대비 최고의 효율을 달성했습니다.
+          </li>
+        </ul>
+      </div>
+      <div class="fragment" style="flex: 0.8; text-align: center;">
+        <a href="assets/slide4-2.png" title="클릭하여 이미지 확대">
+          <img
+            class="placeholder"
+            src="assets/slide4-2.png"
+            alt="AWS 실제 월별 청구 비용 스크린샷"
+            style="border-radius: 12px; max-width: 100%;"
+          />
+        </a>
+        <p style="font-size: 0.7em; margin-top: 8px;"><em>실제 '멍탐정' 프로젝트의 월별 청구 비용</em></p>
+      </div>
+    </div>
+    <aside class="notes">
+      자, AWS가 안정적이고 기능이 많다는 것은 알겠습니다. 그런데 비용은 어떨까요?
+      <br><br>
+      놀랍게도, 저희는 이 모든 인프라를 한 달에 커피 한두 잔 값, 약 1만원 이하의 비용으로 운영하고 있습니다. 여기 보시는 화면이 실제 저희 프로젝트의 AWS 월별 청구서입니다.
+      <br><br>
+      어떻게 이렇게 낮은 비용이 가능했을까요?
+      <br><br>
+      비결은 '선택과 집중'입니다. 저희는 AWS의 모든 서비스를 사용하는 대신, <strong>비용 효율성</strong>을 최우선으로 고려했습니다.
+      <br><br>
+      첫째, 쿠버네티스 서비스인 EKS, 외부 통신을 위한 NAT Gateway, 고정 IP처럼 기본적으로 월 사용료가 나가는 서비스들을 과감히 배제했습니다.
+      <br><br>
+      둘째, 대신 AWS가 제공하는 <strong>프리티어(Free Tier)</strong>, 즉 무료 사용량을 최대한 활용했습니다. t2.micro 같은 작은 EC2 서버, RDS 프리티어 데이터베이스, S3 스토리지 등 꼭 필요한 핵심 서비스만으로 아키텍처를 구성했습니다.
+      <br><br>
+      이처럼 AWS를 현명하게 사용하면, 개인이나 소규모 팀도 비용 부담 없이 매우 강력하고 효율적인 인프라를 구축하고 운영할 수 있다는 것을 보여드리고 싶었습니다.
     </aside>
   </section>
 
@@ -119,7 +167,7 @@
       <div class="fragment" style="flex: 0.7; text-align: center">
         <img
           class="placeholder"
-          src="assets\1-workflow.png"
+          src="assets/slide4-4.png"
           alt="Terraform 모듈 개념도"
           style="border-radius: 12px"
         />
@@ -138,141 +186,5 @@
       GitHub Actions와 연동하여 인프라 변경까지 완전히 자동화하는 기반이 됩니다.
     </aside>
   </section>
-</section>
 
-<!-- 
-  이 파일은 Reveal.js 기준
-  8: CI/CD 개념 설명 (이미지 크기 문제 해결 버전)
-  슬라이드입니다. 
--->
-<section data-part-title="Part 2. ☁️ 인프라 자동화 (Terraform)" data-menu-title="CI/CD 개념">
-  <h3>잠깐, CI/CD가 뭔가요? 🤔</h3>
-  <p>
-    CI/CD는 <strong>"코드를 제품으로 만드는 자동화 공장"</strong>에 비유할 수
-    있습니다. <br />
-    개발자가 '코드'라는 원재료를 넣으면, 테스트, 빌드, 배포 과정이 자동으로
-    처리되어 사용자에게 '제품'이 전달됩니다.
-  </p>
-  <div
-    style="
-      display: flex;
-      align-items: stretch;
-      gap: 20px;
-      margin-top: 20px;
-      height: 500px;
-    "
-  >
-    <!-- 부모 요소에 명시적인 높이 부여 -->
-    <div
-      class="fragment"
-      style="
-        flex: 1;
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-      "
-    >
-      <h4>CI (Continuous Integration)</h4>
-      <p style="font-size: 0.8em">지속적인 통합: "부품 조립 및 품질 검사"</p>
-
-      <!-- 이미지를 감싸는 div 추가 -->
-      <div
-        style="
-          flex-grow: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          min-height: 0;
-        "
-      >
-        <img
-          class="placeholder"
-          src="assets\Gemini_Generated_Image_ic9mp5ic9mp5ic9m.png"
-          alt="코드 병합 및 자동 테스트 그림"
-          style="
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 8px;
-          "
-        />
-      </div>
-
-      <p style="font-size: 0.9em; text-align: left; margin-top: 10px">
-        여러 개발자의 코드를 합칠 때마다 자동으로
-        <strong>빌드(조립)</strong>하고 <strong>테스트(검사)</strong>하여 코드의
-        품질과 안정성을 보장하는 단계입니다.
-      </p>
-    </div>
-    <div
-      class="fragment"
-      style="
-        flex: 1;
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-      "
-    >
-      <h4>CD (Continuous Deployment)</h4>
-      <p style="font-size: 0.8em">지속적인 배포: "완제품 포장 및 출시"</p>
-
-      <!-- 이미지를 감싸는 div 추가 -->
-      <div
-        style="
-          flex-grow: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          min-height: 0;
-        "
-      >
-        <img
-          class="placeholder"
-          src="assets\Gemini_Generated_Image_wd09rwwd09rwwd09.png"
-          alt="서버 자동 배포 그림"
-          style="
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 8px;
-          "
-        />
-      </div>
-
-      <p style="font-size: 0.9em; text-align: left; margin-top: 10px">
-        CI 단계를 통과한 결과물을 사용자가 실제로 사용하는 서버(운영 환경)에
-        <strong>자동으로 배포(출시)</strong>하는 단계입니다.
-      </p>
-    </div>
-  </div>
-  <aside class="notes">
-    방금 '자동화'라는 말을 썼는데, 본격적인 설명에 앞서 CI/CD라는 개념을 잠깐
-    짚고 넘어가겠습니다. 아마 많이 들어보셨을 텐데요, 어렵게 생각할 것 없이
-    '코드를 제품으로 만드는 자동화 공장'이라고 생각하시면 쉽습니다.
-    <br /><br />
-    <strong>먼저 CI, 지속적인 통합입니다.</strong>
-    <br />
-    이건 공장의 '부품 조립 및 품질 검사' 라인입니다. 여러 개발자가 만든 코드
-    조각(부품)들을 하나로 합칠 때마다, 이 코드가 잘 조립(빌드)되는지, 그리고
-    문제는 없는지(테스트) 자동으로 검사하는 과정입니다. 이 덕분에 코드의 품질을
-    항상 높게 유지할 수 있습니다.
-    <br /><br />
-    <strong>다음은 CD, 지속적인 배포입니다.</strong>
-    <br />
-    이건 '완제품 포장 및 출시' 라인입니다. 품질 검사를 통과한
-    완제품(소프트웨어)을 사람이 직접 옮기는 게 아니라, 컨베이어 벨트가 자동으로
-    사용자에게 전달(배포)하는 과정입니다.
-    <br /><br />
-    저희 프로젝트에서는 <strong>GitHub Actions</strong>가 바로 이 CI/CD 공장
-    역할을 합니다. 이제 이 공장이 저희 인프라를 어떻게 자동으로 만들어내는지
-    보여드리겠습니다.
-  </aside>
 </section>

@@ -48,3 +48,109 @@ sequenceDiagram
     인프라 운영이 가능해졌습니다.
   </aside>
 </section>
+
+<section>
+  <section data-menu-title="배포 자동화 (How)">
+    <h3>How? GitHub Actions으로 구현한 '원클릭 배포'</h3>
+    <p>
+      내부 테스트가 완료된 새로운 기능은 더 이상 복잡한 과정 없이, <strong>GitHub Actions</strong> 화면에서 버튼 클릭 한 번으로 배포됩니다. 이를 위해 <strong>수동 실행(workflow_dispatch)</strong> 기능을 활용했습니다.
+    </p>
+    <div style="display: flex; align-items: flex-start; gap: 20px; margin-top: 20px;">
+      
+      <div class="fragment" style="flex: 1; text-align: center;">
+        <p style="font-size: 0.9em;"><strong>1. 배포 실행 (Trigger)</strong></p>
+        <a href="assets/slide6-1.png" target="_blank">
+          <img src="assets/slide6-1.png" alt="GitHub Actions에서 수동으로 배포를 실행하는 화면" style="max-width: 100%; border-radius: 8px; border: 1px solid #555;"/>
+        </a>
+        <p style="font-size: 0.8em; margin-top: 10px;">릴리즈 버전 태그를 입력하고<br/>'Run workflow' 버튼을 클릭합니다.</p>
+      </div>
+
+      <div class="fragment" style="flex: 1; text-align: center;">
+        <p style="font-size: 0.9em;"><strong>2. 자동화된 작업 (Execute)</strong></p>
+        <a href="assets/slide6-2.png" target="_blank">
+          <img src="assets/slide6-2.png" alt="배포 워크플로우의 상세 실행 단계" style="max-width: 100%; border-radius: 8px; border: 1px solid #555;"/>
+        </a>
+        <p style="font-size: 0.8em; margin-top: 10px;">이미지 빌드, ECR 푸시, EC2 배포까지<br/><strong>1분 내외</strong>에 자동으로 완료됩니다.</p>
+      </div>
+
+      <div class="fragment" style="flex: 1; text-align: center;">
+        <p style="font-size: 0.9em;"><strong>3. 배포 기록 (Result)</strong></p>
+        <a href="assets/slide6-3.png" target="_blank">
+          <img src="assets/slide6-3.png" alt="성공적으로 완료된 배포 기록 목록" style="max-width: 100%; border-radius: 8px; border: 1px solid #555;"/>
+        </a>
+        <p style="font-size: 0.8em; margin-top: 10px;">모든 배포 이력이 투명하게 기록되어<br/>추적 및 관리가 용이합니다.</p>
+      </div>
+
+    </div>
+    <aside class="notes">
+      저희가 구현한 '원클릭 배포'의 실제 모습입니다. 복잡한 명령어 대신, 이 화면에서 모든 배포가 시작되고 관리됩니다. 과정은 크게 세 단계로 나뉩니다.
+      <br/><br/>
+      <strong>첫 번째는 '실행'입니다.</strong> 배포 준비가 끝나면, GitHub Actions에서 배포할 버전(태그)을 선택하고 'Run workflow' 버튼만 누르면 됩니다.
+      <br/><br/>
+      <strong>두 번째는 '자동화'입니다.</strong> 버튼을 누르는 순간, 미리 약속된 스크립트가 실행되어 모든 과정이 1분 안에 자동으로 끝납니다.
+      <br/><br/>
+      <strong>마지막은 '기록'입니다.</strong> 모든 배포 과정은 투명하게 기록되어 추적과 관리가 용이합니다.
+      <br/><br/>
+      (아래 슬라이드로 이동하며) 그럼 이 과정을 실제로 구현한 코드의 핵심 부분을 간략히 살펴보겠습니다.
+    </aside>
+  </section>
+
+  <section data-menu-title="배포 자동화 (Code)">
+    <h4>GitHub Actions 워크플로우 핵심 코드</h4>
+    <p style="font-size: 0.8em; margin-bottom: 20px;">
+      실제 배포에 사용된 GitHub Actions 워크플로우(.yml) 파일의 일부입니다.
+    </p>
+    <div style="display: flex; align-items: flex-start; gap: 20px; justify-content: center;">
+
+      <div class="fragment" style="flex: 1;">
+        <p style="font-size: 0.7em; text-align: center;"><strong>1. Trigger: 수동 실행 정의</strong></p>
+        <pre><code class="language-yaml" style="font-size: 0.7em; height: 220px;" data-trim data-noescape>
+on:
+  workflow_dispatch:
+    inputs:
+      git_ref:
+        description: "빌드할 Git 참조"
+        required: true
+      run_description:
+        description: "배포 목적"
+        required: true
+        </code></pre>
+      </div>
+
+      <div class="fragment" style="flex: 1;">
+        <p style="font-size: 0.8em; text-align: center;"><strong>2. Execute: 빌드 & 푸시</strong></p>
+        <pre><code class="language-yaml" style="font-size: 0.7em; height: 220px;" data-trim data-noescape>
+jobs:
+  build:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Build and Push
+        run: |
+          docker build -t $ECR_URL .
+          docker push $ECR_URL
+          </code></pre>
+      </div>
+
+      <div class="fragment" style="flex: 1;">
+        <p style="font-size: 0.8em; text-align: center;"><strong>3. Result: 실행 이름 정의</strong></p>
+        <pre><code class="language-yaml" style="font-size: 0.7em; height: 220px;" data-trim data-noescape>
+run-name: "🚀 Deploy | ${{ github.event.inputs.run_description }} | by @${{ github.actor }}"
+
+# 실행 결과 예시:
+# 🚀 Deploy | 페르소나 기능 추가 | by @user
+        </code></pre>
+      </div>
+
+    </div>
+    <aside class="notes">
+      보시는 것처럼 코드는 세 부분으로 나뉩니다.
+      <br/><br/>
+      <strong>첫 번째</strong>는 `workflow_dispatch`를 사용해 이 워크플로우를 수동으로 실행할 수 있게 하고, 필요한 입력값(어떤 버전을 배포할지, 왜 배포하는지)을 정의하는 부분입니다.
+      <br/><br/>
+      <strong>두 번째</strong>는 실제 작업 내용입니다. 코드를 가져와서, AWS에 안전하게 로그인하고, Docker 이미지를 만들어 저장소에 올리는 과정이 명시되어 있습니다.
+      <br/><br/>
+      <strong>세 번째</strong>는 `run-name` 설정입니다. 덕분에 누가, 어떤 목적으로 배포했는지 목록에서 한눈에 파악할 수 있어 추적성이 매우 높아집니다.
+    </aside>
+  </section>
+</section>
