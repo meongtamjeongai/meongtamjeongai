@@ -1,0 +1,69 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  7: 백엔드 - 왜 FastAPI를 선택했는가? (Why) (수정 버전)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Backend (Why)">
+  <section data-menu-title="Why FastAPI?">
+    <h2 class="r-fit-text">Part 3. 백엔드: 왜 FastAPI를 선택했는가? ⚡️</h2>
+    <p>
+      우리 프로젝트의 심장인 백엔드를 위해, 여러 선택지 중 FastAPI를 선택한
+      데에는 명확한 이유가 있습니다.
+    </p>
+      <div class="fragment" style="flex: 0.8; text-align: center">
+        <img
+          class="placeholder"
+          src="assets\fastapi.png"
+          alt="FastAPI 장점 개념도"
+          style="border-radius: 12px"
+        />
+      </div>
+    </div>
+    <div
+      style="display: flex; align-items: center; gap: 20px; margin-top: 20px"
+    >
+      <div style="flex: 1">
+        <ul>
+          <li class="fragment">
+            <strong>Python 기반의 비동기 처리:</strong> Python 생태계의 풍부한
+            라이브러리를 그대로 활용하면서, <code>async/await</code>를 통해 I/O
+            작업(DB, AI API 호출)을 효율적으로 처리할 수 있었습니다.
+          </li>
+          <li class="fragment">
+            <strong>뛰어난 개발 생산성 (단기 프로젝트에 최적화):</strong> 코드에
+            데이터 타입만 명시하면 <strong>데이터 유효성 검사</strong>는 물론,
+            협업에 필수적인 <strong>API 문서(Scalar UI)</strong>까지 자동으로
+            완성되어 개발 속도를 크게 높여주었습니다.
+          </li>
+          <li class="fragment">
+            <strong>가볍고 현대적인 설계:</strong> 프레임워크 자체가 가벼워
+            배우기 쉽고, 테스트와 기능 확장이 용이한
+            <strong>의존성 주입(DI)</strong> 시스템을 내장하여 유지보수가 쉬운
+            구조를 자연스럽게 만들 수 있었습니다.
+          </li>
+        </ul>
+      </div>
+    <aside class="notes">
+      백엔드 프레임워크로 FastAPI를 선택한 가장 큰 이유는 바로
+      <strong>'높은 개발 생산성'</strong>과
+      <strong>'Python 생태계의 이점'</strong>을 모두 누릴 수 있었기 때문입니다.
+      <br /><br />
+      <strong>첫째, 단기간 프로젝트에 최적화된 개발 속도입니다.</strong> 저희는
+      Pydantic이라는 라이브러리를 사용해 API가 주고받을 데이터의 형식을 코드에
+      타입으로 선언하기만 하면, FastAPI가 알아서 데이터 유효성 검사를 해주고,
+      심지어는 프론트엔드 개발자와의 협업에 필수적인 API 문서를 자동으로
+      만들어주었습니다. 덕분에 버그는 줄고, 문서 작성에 드는 시간을 아껴 핵심
+      기능 개발에만 집중할 수 있었습니다. <br /><br />
+      <strong>둘째, Python 기반의 효율적인 비동기 처리입니다.</strong> 저희
+      프로젝트는 외부 AI API를 호출하는 등 시간이 걸리는 작업이 많았습니다.
+      FastAPI의 비동기(async) 기능을 활용하여, 이런 작업을 기다리는 동안 서버가
+      다른 요청을 처리할 수 있도록 만들어 효율성을 높였습니다. <br /><br />
+      <strong>마지막으로, 가볍고 현대적인 설계입니다.</strong> FastAPI는 다른
+      무거운 프레임워크에 비해 상대적으로 가볍고 배우기 쉬워, 빠르게
+      프로토타입을 만들고 발전시켜야 하는 저희 프로젝트에 안성맞춤이었습니다.
+      <br /><br />
+      이러한 FastAPI의 장점을 바탕으로, 저희는 프로젝트의 전체적인 코드 구조를
+      어떻게 설계했는지 다음 슬라이드에서 말씀드리겠습니다.
+    </aside>
+  </section>
+</section>

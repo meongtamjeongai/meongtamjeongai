@@ -1,0 +1,137 @@
+<!-- 
+  이 파일은 Reveal.js 기준
+  8: 백엔드 - 계층형 아키텍처와 폴더 구조 (Mermaid 적용 수정)
+  슬라이드입니다. 
+-->
+<section data-menu-title="Backend (Arch & How)">
+  <section data-menu-title="Layered Architecture">
+    <h3>Why & How: 책임과 역할에 따라 코드를 분리하는 "계층형 구조"</h3>
+    <p>
+      저희는 백엔드의 모든 코드를 <strong>역할과 책임</strong>에 따라 여러 개의
+      '계층(Layer)'으로 명확하게 분리했습니다.<br />
+      이는 마치 잘 정리된 서랍장처럼, 필요한 코드를 쉽게 찾고 수정할 수 있게
+      만들어줍니다.
+    </p>
+    <div
+      style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px"
+    >
+      <div style="flex: 1.5">
+        <pre><code class="plaintext" data-line-numbers="2-7|8-10|11-13|14-16|17-20" data-trim>
+app/
+├── api/ (요청/응답 처리)
+│   ├── deps.py
+│   └── v1/
+│       ├── api.py (라우터 통합)
+│       └── endpoints/ (기능별 API 정의)
+│           └── ...
+├── core/ (핵심 설정 및 보안)
+│   ├── config.py
+│   └── security.py
+├── services/ (⭐️ 비즈니스 로직)
+│   ├── auth_service.py
+│   └── conversation_service.py
+├── crud/ (단순 DB 작업)
+│   ├── crud_user.py
+│   └── crud_persona.py
+├── models/ (DB 테이블 정의)
+├── schemas/ (데이터 형식 정의)
+└── main.py (앱 실행)
+            </code></pre>
+      </div>
+      <div class="fragment mermaid" style="flex: 1">
+        <pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+graph TD
+    subgraph "Request Flow"
+        A[HTTP Request] --> B(API Layer<br>/api)
+        B --> C(Service Layer<br>/services)
+        C --> D(CRUD Layer<br>/crud)
+        D --> E[🐘<br>Database]
+        E --> D
+        D --> C
+        C --> B
+        B --> F[HTTP Response]
+    end
+          </pre>
+      </div>
+    </div>
+    <aside class="notes">
+      FastAPI라는 좋은 도구를 선택한 뒤, 저희는 '어떻게 하면 코드를 깔끔하고
+      효율적으로 관리할까?'를 고민했습니다. 그 해답은 바로
+      <strong>'계층형 아키텍처'</strong>였습니다. <br /><br />
+      오른쪽 다이어그램처럼, 외부 요청은 항상 API 계층을 통해 들어와 Service
+      계층에서 비즈니스 로직을 처리하고, 필요시 CRUD 계층을 통해 데이터베이스와
+      통신한 후, 다시 역순으로 응답을 반환하는 명확한 흐름을 가집니다.
+      <br /><br />
+      이러한 구조는 왼쪽의 실제 폴더 구조와 정확히 일치합니다.
+      <br />
+      - <strong>api (Controller)</strong>: 외부 요청의 관문입니다. -
+      <strong>services (Service)</strong>: 핵심 비즈니스 로직을 처리합니다. -
+      <strong>crud (Repository)</strong>: 데이터베이스와의 통신만을 전담합니다.
+      <br /><br />
+      이렇게 역할을 나누면, 예를 들어 DB 작업 방식만 바꾸고 싶을 때 `crud`
+      폴더만 수정하면 되고, 비즈니스 로직을 바꿀 땐 `services` 폴더만 보면
+      됩니다. 즉, <strong>유지보수와 기능 확장이 매우 용이</strong>해지는 큰
+      장점이 있습니다.
+    </aside>
+  </section>
+
+  <section data-menu-title="Trade-offs">
+    <h3>Trade-off: 계층형 vs 도메인 중심 구조</h3>
+    <p>
+      물론 다른 대안도 있었습니다. 바로
+      <strong>'도메인(기능) 중심 구조'</strong>입니다.<br />
+      두 방식의 핵심적인 차이는 코드를 <strong>'역할'</strong>로 묶느냐,
+      <strong>'기능'</strong>으로 묶느냐에 있습니다.
+    </p>
+    <div class="mermaid">
+      <pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'primaryColor': '#334', 'lineColor': '#aaa' }}}%%
+graph TD
+    subgraph "계층형 구조 (Layered)"
+        direction LR
+        L_API(api)
+        L_Service(services)
+
+        L_API -- contains --> UserRouter("user_router.py")
+        L_API -- contains --> PersonaRouter("persona_router.py")
+
+        L_Service -- contains --> UserService("user_service.py")
+        L_Service -- contains --> PersonaService("persona_service.py")
+    end
+
+    subgraph "도메인 중심 구조 (Domain-Driven)"
+        direction LR
+        D_User(user)
+        D_Persona(persona)
+
+        D_User -- contains --> UserRouter_D("router.py")
+        D_User -- contains --> UserService_D("service.py")
+
+        D_Persona -- contains --> PersonaRouter_D("router.py")
+        D_Persona -- contains --> PersonaService_D("service.py")
+    end
+      </pre>
+    </div>
+    <p class="fragment" style="margin-top: 20px">
+      <strong>결론:</strong> 저희 프로젝트는 기능이 명확하고 규모가 비교적 크지
+      않아, <strong>빠른 개발 속도와 직관적인 구조</strong>의 이점을 극대화할 수
+      있는 <strong>계층형 구조</strong>가 더 적합하다고 판단했습니다.
+    </p>
+    <aside class="notes">
+      두 구조의 차이를 그림으로 보면 더 명확합니다.
+      <br /><br />
+      저희가 선택한 <strong>계층형 구조</strong>는 `api`, `services` 같은 역할별
+      폴더 안에 여러 기능(user, persona)의 파일이 섞여 들어갑니다. 구조가
+      단순해서 프로젝트를 시작하고 빠르게 개발하기에 좋습니다. <br /><br />
+      반면 <strong>도메인 중심 구조</strong>는 `user`, `persona` 같은 기능별
+      폴더 안에 그 기능에 필요한 router, service 파일이 모두 들어갑니다. 기능별
+      응집도가 매우 높아, 서비스가 아주 크고 복잡해졌을 때 관리가 편하다는
+      장점이 있습니다. <br /><br />
+      하지만 저희 프로젝트는 기능이 명확하고 규모가 아주 크지는 않기 때문에,
+      초기 설정이 복잡한 도메인 구조보다는,
+      <strong>빠른 개발 속도와 직관적인 구조</strong>의 이점을 가진
+      <strong>계층형 구조가 더 합리적인 선택</strong>이라고 판단했습니다.
+    </aside>
+  </section>
+</section>

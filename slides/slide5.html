@@ -1,5 +1,91 @@
 <!-- 
   이 파일은 Reveal.js 기준
+  4: Terraform 프로바이더 - 최종 레이아웃 적용 버전
+  슬라이드입니다. 
+-->
+<section data-menu-title="Terraform의 원리">
+  <h3>What? Terraform의 핵심 원리: 프로바이더(Provider) 🔌</h3>
+
+  <div style="display: flex; align-items: center; gap: 30px; margin-top: 25px">
+    <!-- 왼쪽 텍스트 영역 -->
+    <div style="flex: 1.2">
+      <p>
+        Terraform은 어떻게 AWS, Cloudflare 등 수많은 클라우드 서비스를 관리할 수
+        있을까요?<br />
+        그 비밀은 바로 <strong>프로바이더(Provider)</strong>에 있습니다.
+      </p>
+      <ul>
+        <li class="fragment">
+          <strong>플러그인 형태의 번역가:</strong> 프로바이더는 Terraform 코드와
+          실제 클라우드 서비스(API) 사이를 연결하는
+          <strong>'번역가'</strong> 역할을 하는 플러그인입니다.
+        </li>
+        <li class="fragment">
+          <strong>선언적 관리:</strong> 우리는 그저 "VPC가 필요해"라고 선언만
+          하면, 프로바이더가 알아서 모든 과정을 처리해줍니다.
+        </li>
+      </ul>
+    </div>
+
+    <!-- 오른쪽 이미지 영역 -->
+    <div
+      class="fragment"
+      style="
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <img
+        src="assets/provider-concept.png"
+        alt="Terraform 프로바이더 개념도"
+        style="
+          max-width: 100%;
+          height: auto;
+          border-radius: 12px;
+          background-color: #fafafa;
+          padding: 15px;
+        "
+      />
+    </div>
+  </div>
+
+  <!-- 하단 설명 영역 -->
+  <div class="fragment" style="margin-top: 25px">
+    <p style="font-size: 0.9em">
+      <strong>- AWS 프로바이더:</strong> <code>resource "aws_vpc"</code> 코드를
+      실제 AWS의 VPC 생성 API 호출로 변환합니다.<br />
+      <strong>- Cloudflare 프로바이더:</strong>
+      <code>resource "cloudflare_dns_record"</code> 코드를 Cloudflare의 DNS
+      레코드 생성 API 호출로 변환합니다.
+    </p>
+  </div>
+
+  <aside class="notes">
+    본격적인 인프라 설명에 앞서, Terraform이 어떻게 작동하는지 그 핵심 원리를
+    먼저 짚고 넘어가겠습니다. 바로 '프로바이더'라는 개념입니다.
+    <br /><br />
+    Terraform은 그 자체로는 AWS를 모릅니다. 대신, 각 클라우드 서비스와 통신할 수
+    있는 '프로바이더'라는 플러그인을 사용합니다.
+    <br /><br />
+    이 프로바이더는 일종의 '번역가'라고 생각하시면 쉽습니다. 오른쪽 그림처럼,
+    우리가 작성한 Terraform 코드를 프로바이더(플러그인)가 번역해서 실제
+    목표(Target API)에 전달하는 구조입니다.
+    <br /><br />
+    - 저희가 Terraform 코드로 "AWS VPC를 하나 만들어줘" 라고 작성하면,
+    <strong>AWS 프로바이더</strong>가 이 코드를 실제 AWS가 알아들을 수 있는 API
+    명령으로 번역해서 전달합니다. - 마찬가지로 "Cloudflare에 DNS 레코드를
+    추가해줘" 라고 작성하면, <strong>Cloudflare 프로바이더</strong>가 이를
+    번역해서 처리해줍니다. <br /><br />
+    이 프로바이더 덕분에 저희는 복잡한 API 호출 방식을 일일이 알 필요 없이, 그저
+    '무엇이 필요한지' 선언만 하면 되는 것입니다. 이제 이 원리를 바탕으로 저희가
+    어떤 재료(AWS)와 조립 도구(Terraform)를 왜 선택했는지 말씀드리겠습니다.
+  </aside>
+</section>
+
+<!-- 
+  이 파일은 Reveal.js 기준
   5: 인프라 구축 - 어떻게 코드로 구성했는가?
   슬라이드입니다. 
 -->
