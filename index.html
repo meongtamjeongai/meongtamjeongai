@@ -6,9 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-
+  
     <title>멍탐정 AI - 아키텍처 개요</title>
-
+  
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reset.css"
@@ -17,32 +17,44 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.css"
     />
-
+  
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/theme/night.css"
       id="theme"
     />
-
+  
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+  
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
     />
-
+  
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css"
     />
-
+  
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
     />
-
+  
     <style>
       /* 사용자 정의 스타일: 필요에 따라 직접 CSS를 수정할 수 있습니다. */
       :root {
         --r-main-font-size: 36px;
+        /* 🎨 [수정 2] 기본 폰트를 Pretendard로 변경 */
+        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+          "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol", sans-serif;
       }
       .reveal h1,
       .reveal h2,
@@ -74,7 +86,7 @@
         border: 2px dashed #555;
         background-color: rgba(255, 255, 255, 0.05);
       }
-
+  
       #part-title-display {
         position: fixed; /* 화면 기준으로 완벽하게 고정 */
         top: 25px;
@@ -86,20 +98,20 @@
         padding: 5px 12px;
         border-radius: 15px;
         z-index: 50; /* 모든 요소 위에 표시되도록 z-index 높게 설정 */
-        
+  
         /* 부드러운 효과를 위한 트랜지션 */
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.4s, visibility 0.4s;
-    }
-
-    #part-title-display.visible {
+      }
+  
+      #part-title-display.visible {
         opacity: 1;
         visibility: visible;
-    }
-  </style>
+      }
+    </style>
   </head>
-  <body>
+<body>
     <div class="reveal">
       <div id="part-title-display"></div>
       <div class="slides" id="slides-container"></div>
@@ -283,19 +295,58 @@
       window.addEventListener("DOMContentLoaded", async () => {
         // 동적으로 슬라이드 파일 목록을 생성
         const slideFiles = [];
-        for (let i = 1; i <= 50; i++) {
-          // 최대 50개까지 확인
+        
+        // 1부터 17까지의 슬라이드 로드
+        for (let i = 1; i <= 17; i++) {
           const filename = `slides/slide${i}.html`;
           try {
-            // HEAD 요청으로 파일 존재 여부만 빠르게 확인 (내용은 다운로드 안함)
             const response = await fetch(filename, { method: "HEAD" });
             if (response.ok) {
-              slideFiles.push(filename); // 파일이 존재하면 목록에 추가
+              slideFiles.push(filename);
             } else {
-              break; // 파일이 없으면 더 이상 확인하지 않고 중단
+              console.warn(`File not found: ${filename}`);
+              break;
             }
           } catch (e) {
-            // 네트워크 오류 등 발생 시 중단
+            console.error(`Error checking file ${filename}:`, e);
+            break;
+          }
+        }
+        
+        // Streamlit 관련 추가 슬라이드 (17-1, 17-2)
+        const additionalSlides = [
+          'slides/slide17-0.html',
+          'slides/slide17-1.html',
+          'slides/slide17-2.html',
+        ];
+        
+        // 추가 슬라이드 중 존재하는 파일만 추가
+        for (const slide of additionalSlides) {
+          try {
+            const response = await fetch(slide, { method: "HEAD" });
+            if (response.ok) {
+              slideFiles.push(slide);
+            } else {
+              console.warn(`Additional slide not found: ${slide}`);
+            }
+          } catch (e) {
+            console.error(`Error checking additional slide ${slide}:`, e);
+          }
+        }
+        
+        // 18번 이후 슬라이드 로드
+        for (let i = 18; i <= 50; i++) {
+          const filename = `slides/slide${i}.html`;
+          try {
+            const response = await fetch(filename, { method: "HEAD" });
+            if (response.ok) {
+              slideFiles.push(filename);
+            } else {
+              // 18번 이후 파일이 없으면 중단
+              break;
+            }
+          } catch (e) {
+            console.error(`Error checking file ${filename}:`, e);
             break;
           }
         }

@@ -1,91 +1,63 @@
 <!-- 
   이 파일은 Reveal.js 기준
-  23: 프론트엔드 - Streamlit으로 관리자 페이지 만들기 (How) (이미지 교체 및 정렬 수정)
+  19: 프론트엔드 - Streamlit 개발 경험 요약 (Experience)
   슬라이드입니다. 
 -->
-<section data-part-title="Part 4. 🖥️ 프론트엔드 (Streamlit)" data-menu-title="Frontend (How-to)">
-  <section data-menu-title="How-to Streamlit">
-    <h3>How? Code: "마법처럼" 간단한 UI 개발</h3>
-    <p>
-      Streamlit은 Python 스크립트를 웹 앱으로 즉시 변환해줍니다.<br />
-      복잡한 프레임워크 문법 없이, 간단한 함수 호출만으로 UI 컴포넌트가
-      생성됩니다.
-    </p>
-    <div
-      style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px"
-    >
-      <div style="flex: 1.2">
-        <p style="text-align: center; font-size: 0.9em">
-          <strong>🐍 Streamlit 코드 예시 (admin_app.py)</strong>
-        </p>
-        <pre><code class="python" data-trim>
-import streamlit as st
-from api import ApiClient # 백엔드 API 호출용 클라이언트
+<section data-part-title="Part 4. 🖥️ 프론트엔드 (Streamlit)" data-menu-title="Frontend (Experience)">
+  <section data-menu-title="Streamlit Experience">
+      <h3>Experience: '최소 노력, 최대 효과'의 경험 🚀</h3>
+      <p>
+          Streamlit을 사용한 경험은 <strong>'가장 중요한 것에 집중하게 해주는 도구'</strong>로 요약할 수 있습니다.<br>
+          단 몇 줄의 코드로 강력한 기능과 성능 최적화를 동시에 달성했습니다.
+      </p>
+      <div style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px;">
+          <div style="flex: 1; border: 1px solid #444; border-radius: 12px; padding: 15px;">
+              <h4><strong>① 단 한 줄로 완성되는 UI</strong></h4>
+              <p style="font-size:0.8em;">API로 받아온 복잡한 사용자 목록 데이터를 단 한 줄의 코드로 인터랙티브한 표로 변환했습니다.</p>
+              <pre><code class="python" data-trim>
+# user_view.py
 
-# --- 1. 페이지 제목 설정 ---
-st.title("🐶 멍탐정 관리자 페이지")
+# 백엔드에서 사용자 목록(list of dicts)을 받아온 후...
+user_list = api.get_all_users(token)
 
-# --- 2. 텍스트 입력창 생성 ---
-user_email = st.text_input("검색할 사용자 이메일")
+# Pandas DataFrame으로 변환
+df = pd.DataFrame(user_list)
 
-# --- 3. 버튼 생성 ---
-if st.button("사용자 정보 조회"):
-    # --- 4. 버튼 클릭 시 API 호출 및 결과 표시 ---
-    api = ApiClient()
-    user_data = api.get_user_by_email(user_email)
-    
-    if user_data:
-        st.success("사용자 정보를 찾았습니다!")
-        st.json(user_data) # JSON 형태로 예쁘게 출력
-    else:
-        st.error("해당 사용자를 찾을 수 없습니다.")
+# 단 한 줄로 검색, 정렬 기능이 포함된 표 생성!
+st.dataframe(df)
+              </code></pre>
+          </div>
+          <div style="flex: 1; border: 1px solid #444; border-radius: 12px; padding: 15px;">
+              <h4><strong>② 데코레이터 하나로 성능 최적화</strong></h4>
+              <p style="font-size:0.8em;">자주 바뀌지 않는 데이터(페르소나 목록 등)는 캐싱하여 불필요한 API 호출을 막고 응답 속도를 높였습니다.</p>
+              <pre><code class="python" data-trim>
+# conversation_view.py
 
-                </code></pre>
+# @st.cache_data 데코레이터 한 줄 추가
+@st.cache_data(ttl=300) # 5분간 캐시
+def get_all_personas_for_selection():
+  # 이 함수는 5분 안에 다시 호출되어도
+  # 실제 API를 호출하지 않고 저장된 값을 즉시 반환함
+  return api_client.get_personas(token=token)
+
+# 함수 호출
+all_personas = get_all_personas_for_selection()
+              </code></pre>
+          </div>
       </div>
-      <div
-        class="fragment"
-        style="flex: 1; display: flex; flex-direction: column"
-      >
-        <p style="text-align: center; font-size: 0.9em">
-          <strong>🖥️ 실제 렌더링 결과</strong>
-        </p>
-        <div
-          style="
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-          "
-        >
-          <img
-            src="assets/slide18-1.png"
-            style="
-              max-width: 100%;
-              max-height: 100%;
-              object-fit: contain;
-              border-radius: 12px;
-            "
-          />
-        </div>
-      </div>
-    </div>
-    <aside class="notes">
-      그렇다면 Streamlit 코드는 실제로 어떻게 생겼을까요? 정말 놀랍도록
-      간단합니다.
-      <br /><br />
-      왼쪽 코드를 보시면, - <code>st.title()</code> 함수 하나로 웹 페이지의
-      제목이 만들어집니다. - <code>st.text_input()</code> 함수로 텍스트를
-      입력받는 상자가 생깁니다. - <code>st.button()</code> 함수로 버튼을 만들고,
-      이 버튼이 클릭되었을 때 실행될 로직을 `if` 문 안에 작성합니다.
-      <br /><br />
-      저희는 이 버튼 클릭 로직 안에서, 미리 만들어 둔 백엔드 API 클라이언트를
-      호출하여 사용자 정보를 조회하고, 그 결과를 <code>st.success()</code> 또는
-      <code>st.error()</code>, <code>st.json()</code> 같은 함수를 통해 화면에
-      바로바로 표시했습니다. <br /><br />
-      이처럼 단 몇 줄의 Python 코드만으로 오른쪽과 같은 인터랙티브한 웹 페이지가
-      완성됩니다. 이 압도적인 생산성 덕분에 저희는 관리자 페이지 개발에 드는
-      시간을 최소화하고, 더 중요한 핵심 기능 개발에 집중할 수 있었습니다.
-    </aside>
+      <p class="fragment" style="margin-top: 20px; font-size: 0.9em;">
+          <strong>Trade-off:</strong> 물론, 디자인 자유도가 낮고 복잡한 상태 관리가 어려워 고객용 서비스에는 부적합합니다.<br> 하지만 <strong>내부 관리 도구</strong>를 만드는 데에는 이보다 더 효율적인 선택은 없었습니다.
+      </p>
+      <aside class="notes">
+          Streamlit을 사용한 저희의 경험을 한 문장으로 요약하면 '최소한의 노력으로 최대의 효과를 얻었다' 입니다.
+          <br><br>
+          왼쪽 코드를 보시면, 백엔드에서 받아온 복잡한 사용자 데이터를 단지 <code>st.dataframe()</code>이라는 함수 하나에 넣어주는 것만으로, 검색과 정렬 기능까지 갖춘 완벽한 표가 만들어졌습니다.
+          <br><br>
+          오른쪽 코드는 더 놀랍습니다. 자주 바뀌지 않는 페르소나 목록 같은 데이터를 가져오는 함수 위에 <code>@st.cache_data</code>라는 데코레이터 한 줄만 추가했을 뿐인데, Streamlit이 알아서 그 결과를 5분 동안 기억해줍니다. 덕분에 사용자가 페이지를 이동할 때마다 불필요하게 API를 호출하는 것을 막아, 관리자 페이지의 체감 속도를 크게 높이고 백엔드 서버의 부하도 줄일 수 있었습니다.
+          <br><br>
+          물론 트레이드-오프도 명확합니다. Streamlit은 정해진 UI 컴포넌트만 사용해야 해서 디자인을 마음대로 바꿀 수 없고, 복잡한 사용자 인터랙션을 구현하기에는 한계가 있습니다. 따라서 실제 고객에게 제공할 서비스를 만드는 데는 적합하지 않습니다.
+          <br><br>
+          하지만 저희처럼 <strong>기능 구현이 최우선인 내부 관리 도구</strong>를 만드는 데 있어서는, 프론트엔드 개발에 들어갈 리소스를 아껴 핵심 기능에 집중하게 해준 최고의 선택이었습니다.
+      </aside>
   </section>
 </section>

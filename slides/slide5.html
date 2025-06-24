@@ -5,63 +5,62 @@
 -->
 <section data-part-title="Part 2. ☁️ 인프라 자동화 (Terraform)" data-menu-title="Terraform의 원리">
   <h3 style="font-size: 36px">
-    What? Terraform의 핵심 원리: 프로바이더(Provider) 🔌
+    Terraform의 핵심: 프로바이더 아키텍처 🔌
   </h3>
 
   <div style="display: flex; align-items: center; gap: 30px; margin-top: 25px">
-    <!-- 왼쪽 텍스트 영역 -->
     <div style="flex: 1.2">
       <p>
-        Terraform은 어떻게 AWS, Cloudflare 등 수많은 클라우드 서비스를 관리할 수
-        있을까요?<br />
-        그 비밀은 바로 <strong>프로바이더(Provider)</strong>에 있습니다.
+        <strong>선택:</strong> 3,000개 이상의 공식/커뮤니티 프로바이더를 활용한 범용 인프라 관리
       </p>
       <ul>
         <li class="fragment">
-          <strong>플러그인 형태의 번역가:</strong> 프로바이더는 Terraform 코드와
-          실제 클라우드 서비스(API) 사이를 연결하는
-          <strong>'번역가'</strong> 역할을 하는 플러그인입니다.
+          <strong>통합 인터페이스:</strong> AWS, Azure, GCP 등 다양한 클라우드 서비스를 단일 도구로 관리
         </li>
         <li class="fragment">
-          <strong>선언적 관리:</strong> 우리는 그저 "VPC가 필요해"라고 선언만
-          하면, 프로바이더가 알아서 모든 과정을 처리해줍니다.
+          <strong>선언적 접근:</strong> 원하는 인프라 상태만 정의하면 프로바이더가 API 호출로 변환
         </li>
       </ul>
     </div>
 
-    <!-- 오른쪽 이미지 영역 -->
-    <div
-      class="fragment"
-      style="
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      "
-    >
-      <img
-        src="assets/slide5-1.png"
-        alt="Terraform 프로바이더 개념도"
-        style="
-          max-width: 100%;
-          height: auto;
-          border-radius: 12px;
-          background-color: #fafafa;
-          padding: 15px;
-        "
-      />
+    <!-- 이미지 2개를 나란히 배치 -->
+    <div class="fragment" style="flex: 1; display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 36px; overflow: visible; flex-wrap: wrap;">
+      <!-- 기존 이미지 -->
+      <div style="display: flex; flex-direction: column; align-items: center; max-width: 48%; min-width: 240px;">
+        <img
+          src="assets/slide5-1.png"
+          alt="Terraform Provider Conceptual Diagram"
+          style="max-width: 460px; max-height: 380px; min-width: 380px; min-height: 120px; width: 100%; height: auto; object-fit: contain; border-radius: 10px; background-color: #fafafa; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.10); margin-bottom: 8px;"
+        />
+      </div>
+      <!-- 새 이미지 -->
+      <div style="display: flex; flex-direction: column; align-items: center; max-width: 48%; min-width: 240px;">
+        <img
+          src="assets/slide5-2.png"
+          alt="Terraform 프로바이더 목록"
+          style="max-width: 460px; max-height: 380px; min-width: 380px; min-height: 120px; width: 100%; height: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-bottom: 8px;"
+        />
+      </div>
     </div>
   </div>
 
-  <!-- 하단 설명 영역 -->
   <div class="fragment" style="margin-top: 25px">
     <p style="font-size: 0.9em">
-      <strong>- AWS 프로바이더:</strong> <code>resource "aws_vpc"</code> 코드를
-      실제 AWS의 VPC 생성 API 호출로 변환합니다.<br />
-      <strong>- Cloudflare 프로바이더:</strong>
-      <code>resource "cloudflare_dns_record"</code> 코드를 Cloudflare의 DNS
-      레코드 생성 API 호출로 변환합니다.
+      <strong>결과:</strong> <code>resource</code> 정의만으로 모든 클라우드 리소스 프로비저닝 자동화
     </p>
+    <pre style="font-size: 0.7em; background: #3a3a3a; padding: 15px; border-radius: 5px;">
+# AWS VPC 생성
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+# Cloudflare DNS 레코드 추가
+resource "cloudflare_record" "www" {
+  zone_id = var.zone_id
+  name    = "www"
+  value   = "192.0.2.1"
+  type    = "A"
+}</pre>
   </div>
 
   <aside class="notes">
@@ -93,12 +92,25 @@
 -->
 <section data-part-title="Part 2. ☁️ 인프라 자동화 (Terraform)" data-menu-title="인프라 구축 (How)">
   <section data-menu-title="Terraform 구조">
-    <h3>How? ①: 모듈(Module)로 인프라 조립하기</h3>
+    <h3>모듈화된 인프라 아키텍처</h3>
     <p>
-      저희는 VPC, EC2, RDS 등 AWS의 각 서비스 단위를 하나의
-      <strong>모듈(Module)</strong>, 즉 재사용 가능한 '레고 블록'으로
-      만들었습니다. <br />그리고 <code>main.tf</code> 라는 최상위 설계도에서 이
-      블록들을 조립해 전체 인프라를 완성합니다.
+      <strong>선택:</strong> VPC, EC2, RDS 등을 독립적인 모듈로 분리하여 구성
+      <br /><strong>결과:</strong> 재사용성 ↑, 유지보수성 ↑, 팀 협업 효율성 ↑
+    </p>
+    <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+      <div style="background: #3a3a3a; padding: 15px; border-radius: 8px; width: 30%;">
+        <strong>VPC 모듈</strong><br>
+        네트워크 인프라 관리
+      </div>
+      <div style="background: #3a3a3a; padding: 15px; border-radius: 8px; width: 30%;">
+        <strong>EC2 모듈</strong><br>
+        서버 인스턴스 관리
+      </div>
+      <div style="background: #3a3a3a; padding: 15px; border-radius: 8px; width: 30%;">
+        <strong>RDS 모듈</strong><br>
+        데이터베이스 관리
+      </div>
+    </div>
     </p>
     <div
       style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px"
@@ -106,7 +118,7 @@
       <div style="flex: 1; text-align: center">
         <img
           class="r-stretch placeholder"
-          src="assets/slide5-2.jpg"
+          src="assets/slide5-3.png"
           alt="Terraform 디렉토리 구조 다이어그램"
           style="border-radius: 12px"
         />

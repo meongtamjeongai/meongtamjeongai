@@ -1,67 +1,55 @@
-<!-- 
-  이 파일은 Reveal.js 기준
-  22: 프론트엔드 - 왜 Streamlit을 선택했는가? (Why)
-  슬라이드입니다. 
--->
 <section data-part-title="Part 4. 🖥️ 프론트엔드 (Streamlit)" data-menu-title="Frontend (Why Streamlit?)">
   <section data-menu-title="Why Streamlit?">
     <h2 class="r-fit-text">프론트엔드: 왜 Streamlit인가? 📊</h2>
     <p>
-      저희는 사용자 데이터 관리, AI 기능 테스트 등을 위한
-      <strong>관리자 페이지</strong>가 필요했습니다.<br />
-      하지만 프론트엔드 개발에 많은 시간을 쏟을 수는 없었습니다. 저희의 선택은
-      <strong>Streamlit</strong>이었습니다.
+      관리자 페이지가 필요했지만, 프론트엔드 개발 리소스는 부족했습니다.<br/>
+      이 문제에 대한 저희의 해답은 <strong>Streamlit</strong>이었습니다.
     </p>
-    <div
-      style="display: flex; align-items: center; gap: 20px; margin-top: 20px"
-    >
-      <div style="flex: 1">
-        <ul>
+    <div style="display: flex; align-items: center; gap: 40px; margin-top: 20px;">
+      
+      <div style="flex: 0.9;">
+        <ul style="font-size: 1em; list-style-type: none; padding-left: 0;">
           <li class="fragment">
-            <strong>오직 Python만으로 웹 UI 구현:</strong> HTML, CSS,
-            JavaScript를 전혀 몰라도, 익숙한
-            <strong>Python 코드만으로</strong> 인터랙티브한 웹 페이지를 만들 수
-            있습니다.
+            <strong>🐍 순수 Python으로 UI 구현</strong>
+            <pre style="margin-top: 5px;"><code class="language-python" style="font-size: 0.85em !important;"># 예시: 텍스트 입력창 생성
+name = st.text_input("이름을 입력하세요")</code></pre>
           </li>
           <li class="fragment">
-            <strong>압도적인 개발 속도:</strong> 복잡한 상태 관리나 콜백 없이,
-            스크립트처럼 위에서 아래로 코드를 작성하면 그대로 웹 화면이 완성되어
-            <strong>개발 시간이 획기적으로 단축</strong>됩니다.
+            <strong>🚀 압도적으로 빠른 개발 속도</strong>
+             <pre style="margin-top: 5px;"><code class="language-python" style="font-size: 0.85em !important;"># 예시: 버튼 클릭 시 메시지 표시
+if st.button("인사하기"):
+    st.write(f"{name}님, 환영합니다!")</code></pre>
           </li>
           <li class="fragment">
-            <strong>데이터 시각화에 최적화:</strong> 몇 줄의 코드만으로
-            데이터프레임, 차트, 지도 등을 손쉽게 시각화할 수 있어 데이터 기반의
-            관리 도구에 안성맞춤입니다.
+            <strong>📈 강력한 데이터 시각화 기능</strong>
+            <pre style="margin-top: 5px;"><code class="language-python" style="font-size: 0.85em !important;"># 예시: 데이터프레임을 테이블로 표시
+st.dataframe(my_dataframe)</code></pre>
           </li>
         </ul>
       </div>
-      <div class="fragment" style="flex: 1; text-align: center">
-        <img
-          class="placeholder"
-          src="assets/slide17-1.png"
-          alt="Streamlit으로 만든 관리자 페이지 예시"
-          style="border-radius: 12px"
-        />
+
+      <div class="fragment" style="flex: 1.3; text-align: center;">
+        <img class="placeholder" src="assets/slide17-1.png" alt="Streamlit으로 만든 관리자 페이지 예시" style="border-radius: 12px; max-width: 650px;"/>
       </div>
+
     </div>
     <aside class="notes">
-      이제 프론트엔드, 그중에서도 저희가 관리자 페이지를 만든 경험에 대해
-      말씀드리겠습니다.
-      <br /><br />
-      저희는 사용자 데이터를 관리하고, AI 기능을 직접 테스트해볼 수 있는 내부용
-      관리자 페이지가 필요했습니다. 하지만 한정된 시간 안에 복잡한 프론트엔드
-      기술을 배우고 개발하는 것은 부담이었습니다.
-      <br /><br />
-      이때 저희의 눈에 들어온 것이 바로 <strong>Streamlit</strong>입니다.
-      <br /><br />
-      Streamlit의 가장 큰 장점은,
-      <strong
-        >HTML, CSS, JavaScript를 전혀 사용하지 않고 오직 Python 코드만으로 웹
-        페이지를 만들 수 있다</strong
-      >는 점입니다. `st.button`, `st.text_input` 같은 간단한 함수를 호출하면,
-      오른쪽 화면처럼 버튼과 입력창이 뚝딱 만들어집니다. <br /><br />
-      덕분에 저희는 프론트엔드 개발에 드는 시간을 획기적으로 줄이고, 그 에너지를
-      백엔드와 인프라의 핵심 로직을 개발하는 데 온전히 쏟을 수 있었습니다.
+      마지막으로 프론트엔드, 그중에서도 저희가 내부 관리자 페이지를 구축한 경험을 공유해 드리겠습니다.
+      <br/><br/>
+      저희는 사용자 데이터를 조회하거나, 새로 개발한 AI 기능을 직접 테스트해볼 내부 도구가 반드시 필요했습니다. 하지만 한정된 시간 안에 React나 Vue 같은 본격적인 프론트엔드 기술을 사용해 개발하는 것은 현실적으로 불가능에 가까웠습니다. <strong>백엔드 개발자가 프론트엔드까지 빠르게 만들어야 하는 상황</strong>이었습니다.
+      <br/><br/>
+      이때 저희의 선택이 바로 <strong>Streamlit</strong>이었습니다.
+      <br/><br/>
+      <strong>첫 번째 장점은, 보시는 것처럼 순수 Python 코드만으로 웹 UI를 구현할 수 있다는 점입니다.</strong>
+      슬라이드의 첫 번째 예시처럼, <code>st.text_input</code>이라는 함수를 호출하기만 하면 웹 화면에 텍스트 입력창이 하나 만들어지고, 사용자가 입력한 값은 `name`이라는 변수에 저장됩니다. 웹 기술을 전혀 몰라도 됩니다.
+      <br/><br/>
+      <strong>두 번째는 '압도적으로 빠른 개발 속도'입니다.</strong>
+      두 번째 예시를 봐주세요. Python의 평범한 <code>if</code>문입니다. <code>st.button</code> 함수는 버튼을 만들면서 동시에 '사용자가 버튼을 클릭했는지' 여부를 참/거짓으로 반환합니다. 그래서 보시는 것처럼, '인사하기' 버튼을 누르면 그 아래의 <code>st.write</code> 코드가 실행되어 화면에 환영 메시지를 뿌려주는 로직이 단 두 줄로 완성됩니다. 복잡한 콜백이나 상태 관리가 전혀 필요 없습니다.
+      <br/><br/>
+      <strong>마지막으로, '강력한 데이터 시각화 기능'입니다.</strong>
+      Streamlit은 데이터 과학을 위한 도구에서 출발했기 때문에 데이터 표현에 매우 강합니다. 세 번째 예시처럼, Pandas 라이브러리로 처리한 `my_dataframe`이라는 데이터 뭉치를 <code>st.dataframe</code> 함수에 그냥 넘겨주기만 하면, 오른쪽 화면처럼 정렬과 검색까지 가능한 멋진 표를 즉시 만들어줍니다.
+      <br/><br/>
+      결론적으로, Streamlit 덕분에 저희는 프론트엔드 개발에 드는 시간을 90% 이상 단축하고, 그 에너지를 백엔드 핵심 로직과 인프라 안정화에 온전히 쏟을 수 있었습니다.
     </aside>
   </section>
 </section>
