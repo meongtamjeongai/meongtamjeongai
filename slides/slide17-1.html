@@ -3,16 +3,27 @@
   16: 프론트엔드 - Streamlit 페이지 구조 (How)
   슬라이드입니다. 
 -->
-<section data-part-title="Part 4. 🖥️ 프론트엔드 (Streamlit)" data-menu-title="Frontend (Structure)">
-    <section data-menu-title="Streamlit Structure">
-      <h2 class="r-fit-text">Part 4. 프론트엔드: Streamlit으로 페이지 구조화하기 🏗️</h2>
-      <p>
-        Streamlit은 본래 단일 페이지 앱이지만, 저희는 <strong>사이드바(Sidebar)와 함수 호출</strong>을 조합하여 여러 페이지를 가진 것처럼 느껴지는 직관적인 UI/UX를 구현했습니다.
-      </p>
-      <div style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px;">
-          <div style="flex: 1.2;">
-              <p style="text-align: center; font-size: 0.9em;"><strong>🐍 페이지 분기 코드 (admin_app.py)</strong></p>
-              <pre><code class="python" data-trim>
+<section
+  data-part-title="Part 4. 🖥️ 프론트엔드 (Streamlit)"
+  data-menu-title="Frontend (Structure)"
+>
+  <section data-menu-title="Streamlit Structure">
+    <h2 class="r-fit-text">
+      Part 4. 프론트엔드: Streamlit으로 페이지 구조화하기 🏗️
+    </h2>
+    <p>
+      Streamlit은 본래 단일 페이지 앱이지만, 저희는
+      <strong>사이드바(Sidebar)와 함수 호출</strong>을 조합하여 여러 페이지를
+      가진 것처럼 느껴지는 직관적인 UI/UX를 구현했습니다.
+    </p>
+    <div
+      style="display: flex; align-items: stretch; gap: 20px; margin-top: 20px"
+    >
+      <div style="flex: 1.2">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>🐍 페이지 분기 코드 (admin_app.py)</strong>
+        </p>
+        <pre><code class="python" data-trim>
   import streamlit as st
   from views import user_view, persona_view, ...
   
@@ -31,22 +42,41 @@
   # 2. 선택된 페이지에 맞는 함수를 호출하여 화면 렌더링
   page_options[selected_page](api_client, token)
               </code></pre>
-          </div>
-          <div class="fragment" style="flex: 1; text-align: center;">
-              <p style="text-align: center; font-size: 0.9em;"><strong>🖥️ 실제 렌더링 결과</strong></p>
-              <img class="r-stretch placeholder" src="https://placehold.co/500x550/222222/ffffff?text=Streamlit+Sidebar+Navigation" alt="Streamlit 사이드바 네비게이션 예시" style="border-radius: 12px;">
-          </div>
       </div>
-      <aside class="notes">
-        Streamlit으로 어떻게 복잡한 관리자 페이지를 만들었는지, 그 구조부터 설명드리겠습니다.
-        <br><br>
-        Streamlit은 원래 하나의 긴 스크립트처럼 동작합니다. 저희는 이를 여러 페이지가 있는 것처럼 만들기 위해 간단한 트릭을 사용했습니다.
-        <br><br>
-        1. 먼저 왼쪽 코드처럼, <code>st.sidebar.radio</code> 함수를 사용해 화면 왼쪽에 메뉴를 만듭니다. 각 메뉴 이름과, 그 메뉴가 선택됐을 때 실행될 함수를 딕셔너리로 묶어 관리합니다. '사용자 관리'를 누르면 `user_view.render_page` 함수가, '페르소나 관리'를 누르면 `persona_view.render_page` 함수가 호출되는 식입니다.
-        <br><br>
-        2. 사용자가 사이드바에서 메뉴를 선택하면, 저희는 그 선택에 맞는 함수를 호출하여 화면의 메인 영역을 해당 페이지의 내용으로 채웁니다.
-        <br><br>
-        이러한 '가상 라우팅' 방식을 통해, 저희는 <strong>하나의 메인 파일(`admin_app.py`)은 페이지를 분기하는 역할만 하도록 깔끔하게 유지</strong>하고, 각 페이지의 실제 UI와 로직은 `user_view.py`, `persona_view.py` 같은 별도의 파일로 분리하여 관리할 수 있었습니다. 이는 코드의 가독성과 유지보수성을 크게 향상시켰습니다.
-      </aside>
-    </section>
+      <div class="fragment" style="flex: 1; text-align: center">
+        <p style="text-align: center; font-size: 0.9em">
+          <strong>🖥️ 실제 렌더링 결과</strong>
+        </p>
+        <img
+          class="r-stretch placeholder"
+          src="assets\slide17-1-1.png"
+          alt="Streamlit 사이드바 네비게이션 예시"
+          style="border-radius: 12px"
+        />
+      </div>
+    </div>
+    <aside class="notes">
+      Streamlit으로 어떻게 복잡한 관리자 페이지를 만들었는지, 그 구조부터
+      설명드리겠습니다.
+      <br /><br />
+      Streamlit은 원래 하나의 긴 스크립트처럼 동작합니다. 저희는 이를 여러
+      페이지가 있는 것처럼 만들기 위해 간단한 트릭을 사용했습니다.
+      <br /><br />
+      1. 먼저 왼쪽 코드처럼, <code>st.sidebar.radio</code> 함수를 사용해 화면
+      왼쪽에 메뉴를 만듭니다. 각 메뉴 이름과, 그 메뉴가 선택됐을 때 실행될
+      함수를 딕셔너리로 묶어 관리합니다. '사용자 관리'를 누르면
+      `user_view.render_page` 함수가, '페르소나 관리'를 누르면
+      `persona_view.render_page` 함수가 호출되는 식입니다. <br /><br />
+      2. 사용자가 사이드바에서 메뉴를 선택하면, 저희는 그 선택에 맞는 함수를
+      호출하여 화면의 메인 영역을 해당 페이지의 내용으로 채웁니다.
+      <br /><br />
+      이러한 '가상 라우팅' 방식을 통해, 저희는
+      <strong
+        >하나의 메인 파일(`admin_app.py`)은 페이지를 분기하는 역할만 하도록
+        깔끔하게 유지</strong
+      >하고, 각 페이지의 실제 UI와 로직은 `user_view.py`, `persona_view.py` 같은
+      별도의 파일로 분리하여 관리할 수 있었습니다. 이는 코드의 가독성과
+      유지보수성을 크게 향상시켰습니다.
+    </aside>
   </section>
+</section>
