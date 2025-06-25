@@ -3,13 +3,16 @@
   5: 코어 아키텍처 - 핵심 구조 한눈에 보기
   슬라이드입니다. 
 -->
-<section data-part-title="Part 1. 인트로 (Introduction)" data-menu-title="코어 아키텍처">
-   <h2 class="r-fit-text">핵심 구조 한눈에 보기 뼈대</h2>
-   <p style="text-align: center; font-size: 24px">
+<section
+  data-part-title="Part 1. 인트로 (Introduction)"
+  data-menu-title="코어 아키텍처"
+>
+  <h2 class="r-fit-text">핵심 구조 한눈에 보기 뼈대</h2>
+  <p style="text-align: center; font-size: 24px">
     본격적인 아키텍처 설명에 앞서, 우리 시스템의 가장 핵심적인 뼈대를 먼저
     보여드립니다.
-   </p>
-   <div class="mermaid" style="margin-top: 25px">
+  </p>
+  <div class="mermaid" style="margin-top: 25px">
     <pre>
   %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
   graph LR
@@ -41,38 +44,46 @@
     BE <--> DB
     BE <--> AI
       </pre>
-   </div>
-   <p class="fragment" style="margin-top: 20px; text-align: center">
-    사용자 요청은 <strong>ALB</strong>를 통해 <strong>FastAPI 앱</strong>으로 전달되고<br />개발자의 코드는 <strong>GitHub와 연동된 Terraform Cloud</strong>를 통해 자동으로 배포됩니다.
-   </p>
-   <aside class="notes">
+  </div>
+  <p class="fragment" style="margin-top: 20px; text-align: center">
+    사용자 요청은 <strong>ALB</strong>를 통해 <strong>FastAPI 앱</strong>으로
+    전달되고<br />개발자의 코드는
+    <strong>GitHub와 연동된 Terraform Cloud</strong>를 통해 자동으로 배포됩니다.
+  </p>
+  <aside class="notes">
     전체 아키텍처를 자세히 보기 전에, 먼저 저희 시스템의 가장 중요한 뼈대만
     간추려서 보여드리겠습니다.
     <br /><br />
     크게 두 가지 흐름이 있습니다.
     <br /><br />
-    <strong>첫째, 사용자 요청 흐름입니다. (위쪽)</strong>
+    <strong>첫째, 사용자 요청 흐름입니다.</strong>
     <br />
     사용자의 모든 요청은 AWS의 관문인 <strong>ALB(로드밸런서)</strong>를 통해
     들어옵니다. ALB는 이 요청을 안전한 내부망에 있는
     <strong>FastAPI 백엔드 서버</strong>로 전달합니다. 서버는 요청을 처리하며
     필요에 따라 <strong>데이터베이스(RDS)</strong>와 통신하거나,
     <strong>Gemini AI</strong>에게 물어봅니다. <br /><br />
-    <strong>둘째, 개발 및 배포 흐름입니다. (아래쪽)</strong>
+    <strong>둘째, 개발 및 배포 흐름입니다.</strong>
     <br />
-      개발자가 코드를 <strong>GitHub</strong>에 올리면, <strong>GitHub App으로 연동된 Terraform Cloud</strong>가 저장소의 변경 사항을 감지합니다. 이후 <strong>VCS(Version Control System) 연동 기능</strong>을 통해 자동으로 인프라 구성(서버, 데이터베이스 등)을 관리하고 배포합니다.
-      <br /><br />
+    개발자가 코드를 <strong>GitHub</strong>에 올리면,
+    <strong>GitHub App으로 연동된 Terraform Cloud</strong>가 저장소의 변경
+    사항을 감지합니다. 이후
+    <strong>VCS(Version Control System) 연동 기능</strong>을 통해 자동으로
+    인프라 구성(서버, 데이터베이스 등)을 관리하고 배포합니다. <br /><br />
     이 핵심 구조를 기억하시면서, 이제 모든 구성요소가 포함된 전체 아키텍처를
     살펴보겠습니다.
-   </aside>
-  </section>
+  </aside>
+</section>
 
 <!-- 
   이 파일은 Reveal.js 기준
   6: 전체 아키텍처 (Zoom 기능 적용)
   슬라이드입니다. 
 -->
-<section data-part-title="Part 1. 인트로 (Introduction)" data-menu-title="시스템 청사진">
+<section
+  data-part-title="Part 1. 인트로 (Introduction)"
+  data-menu-title="시스템 청사진"
+>
   <h2 class="r-fit-text">멍탐정 시스템 청사진: 전체 아키텍처 🗺️</h2>
   <div style="margin-top: 20px; text-align: center">
     <!-- <a> 태그로 이미지를 감싸고, href에 이미지 경로를 지정합니다 -->
