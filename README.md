@@ -10,21 +10,44 @@
 ![Last Commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-**Terraform, FastAPI, Streamlit을 활용한 AI 기반 피싱 대응 훈련 플랫폼**
+**Flutter, Terraform, FastAPI, Streamlit을 활용한 AI 기반 피싱 대응 훈련 플랫폼**
 
 '멍탐정 AI'는 사용자가 AI 챗봇과의 대화를 통해 현실과 유사한 피싱 시나리오를 경험하고, 이에 대한 대응 능력을 안전하게 훈련할 수 있도록 설계된 서비스입니다. 이 프로젝트는 현대적인 DevOps 파이프라인과 효율적인 백엔드/프론트엔드 기술 스택을 기반으로 구축되었습니다.
 
 ---
 
-## 🚀 Live Demo
+## 🚀 시연 영상 및 주요 결과
 
 **🎬 [전체 기능 시연 영상 보러가기 (Google Drive)](https://drive.google.com/file/d/1CW1RFVTsZT1Ahi1aE7jT4XeDva7bOLPT/view?usp=sharing)**
 
-| 서비스                | 링크                                                                                             | 설명                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| 🖥️ **관리자 페이지**    | [admin.meong.shop](https://admin.meong.shop)                                                     | 사용자, 페르소나, 대화방 관리 및 테스트      |
-| 📄 **API 문서**        | [meong.shop/scalar](https://meong.shop/scalar)                                                   | FastAPI로 자동 생성된 인터랙티브 API 문서 |
-| ☁️ **Terraform Cloud** | [Workspace](https://app.terraform.io/app/meongtamjeongai/workspaces/meongtamjeongai-devops) | 인프라 상태 및 배포 관리                 |
+<br>
+
+<details>
+<summary><strong>🖥️ ① 관리자 페이지 (Streamlit)</strong></summary>
+<br>
+
+![관리자 페이지 스크린샷](assets/demo-admin-page.png)
+*Python의 Streamlit 라이브러리만으로 제작된 관리자 페이지입니다. 사용자, 페르소나, 대화방 등 모든 데이터를 관리하고 AI 기능을 직접 테스트할 수 있습니다.*
+
+</details>
+
+<details>
+<summary><strong>📄 ② API 문서 (FastAPI + Scalar)</strong></summary>
+<br>
+
+![API 문서 스크린샷](assets/demo-api-docs.png)
+*FastAPI가 Pydantic 모델을 기반으로 자동 생성한 인터랙티브 API 문서입니다. 모든 엔드포인트를 직접 테스트해볼 수 있습니다.*
+
+</details>
+
+<details>
+<summary><strong>☁️ ③ 인프라 관리 (Terraform Cloud)</strong></summary>
+<br>
+
+![Terraform Cloud 워크스페이스](assets/slide4-4.png)
+*GitHub과 연동된 Terraform Cloud 워크스페이스입니다. 코드 변경 시 자동으로 Plan/Apply가 실행되고 모든 배포 이력이 기록됩니다.*
+
+</details>
 
 ---
 
@@ -203,8 +226,6 @@ terraform-aws-fastapi-infra/
 2.  이 Push는 Github App을 통해 Terraform Cloud에 자동으로 전달됩니다.
 3.  Terraform Cloud는 워크스페이스에서 `plan`을 실행하고, (설정에 따라) 관리자의 승인을 기다리거나 자동으로 `apply`를 진행하여 실제 AWS 인프라에 변경 사항을 적용합니다.
 4.  모든 실행 과정과 결과는 Terraform Cloud UI에서 추적할 수 있습니다.
-
-![Terraform Cloud UI](assets/slide4-4.png)
 
 ---
 
