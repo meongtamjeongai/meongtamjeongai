@@ -202,6 +202,8 @@ terraform-aws-fastapi-infra/
 3.  Terraform Cloud는 워크스페이스에서 `plan`을 실행하고, (설정에 따라) 관리자의 승인을 기다리거나 자동으로 `apply`를 진행하여 실제 AWS 인프라에 변경 사항을 적용합니다.
 4.  모든 실행 과정과 결과는 Terraform Cloud UI에서 추적할 수 있습니다.
 
+![Terraform Cloud UI](assets/slide4-4.png)
+
 ---
 
 ## 🧭 향후 계획 (Roadmap)
