@@ -126,6 +126,7 @@ terraform-aws-fastapi-infra/
 -   [Docker](https://www.docker.com/products/docker-desktop/)
 -   [VS Code](https://code.visualstudio.com/)
 -   [Dev Containers 확장 프로그램](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+-   (선택) [AWS CLI](https://aws.amazon.com/cli/): 로컬에서 AWS 리소스 상태를 직접 확인하고 싶을 경우에만 필요합니다.
 
 **설정 단계:**
 
@@ -158,6 +159,48 @@ terraform-aws-fastapi-infra/
 7.  **접속 확인:**
     -   **백엔드 API 문서:** [http://localhost:8000/scalar](http://localhost:8000/scalar)
     -   **관리자 페이지:** [http://localhost:8501](http://localhost:8501)
+
+---
+
+## ☁️ 인프라 관리 및 배포 (Infrastructure Management)
+
+이 프로젝트의 모든 인프라는 Terraform과 Terraform Cloud를 통해 코드로 관리되며, GitHub에 Push하는 것만으로 배포가 트리거됩니다.
+
+### 1. Terraform Cloud 설정
+
+-   **워크스페이스:** 모든 인프라 상태(state)는 [Terraform Cloud의 `meongtamjeongai-devops` 워크스페이스](https://app.terraform.io/app/meongtamjeongai/workspaces/meongtamjeongai-devops)에서 안전하게 관리됩니다.
+-   **🔑 환경 변수:** `db_password`, `fastapi_secret_key` 등 모든 민감 정보는 Terraform Cloud 워크스페이스의 **Variables**에 `Environment variable` 타입으로, 그리고 **Sensitive**로 설정되어 있습니다. 소스 코드에는 어떠한 민감 정보도 포함되지 않습니다.
+
+### 2. 로컬에서 인프라 변경 계획 확인 (선택 사항)
+
+인프라 코드를 수정한 후, GitHub에 Push하기 전에 로컬에서 변경 사항을 미리 확인(`plan`)할 수 있습니다.
+
+1.  **Terraform 설치:** 로컬 머신에 [Terraform](https://www.terraform.io/downloads)을 설치합니다.
+2.  **Terraform 로그인:**
+    ```bash
+    terraform login
+    ```
+    -   브라우저가 열리면 Terraform Cloud에 로그인하여 토큰을 발급받습니다.
+
+3.  **Plan 실행:**
+    ```bash
+    # 인프라 코드 디렉토리로 이동
+    cd terraform-aws-fastapi-infra
+
+    # Terraform 초기화 (최초 1회 또는 프로바이더 변경 시)
+    terraform init
+
+    # 변경 계획 확인
+    terraform plan
+    ```
+    -   이 명령은 실제 인프라를 변경하지 않고, 어떤 리소스가 생성, 수정, 삭제될지 미리 보여줍니다.
+
+### 3. 실제 배포 워크플로우
+
+1.  로컬에서 수정한 인프라 코드를 GitHub 저장소의 `main` 브랜치에 Push합니다.
+2.  이 Push는 Github App을 통해 Terraform Cloud에 자동으로 전달됩니다.
+3.  Terraform Cloud는 워크스페이스에서 `plan`을 실행하고, (설정에 따라) 관리자의 승인을 기다리거나 자동으로 `apply`를 진행하여 실제 AWS 인프라에 변경 사항을 적용합니다.
+4.  모든 실행 과정과 결과는 Terraform Cloud UI에서 추적할 수 있습니다.
 
 ---
 
