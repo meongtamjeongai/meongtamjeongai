@@ -48,9 +48,9 @@
 
 *FastAPI가 Pydantic 모델을 기반으로 자동 생성한 인터랙티브 API 문서입니다. 모든 엔드포인트를 직접 테스트해볼 수 있습니다.*
 
-| 메인 | 사이드 메뉴 | 테스트 |
-|---|---|---|
-| ![api](api/api_main.PNG) | ![api](api/api_menu.PNG) | ![api](api/api_test.PNG) |
+![api](api/api_main.PNG)
+![api](api/api_menu.PNG)
+![api](api/api_test.PNG)
 
 </details>
 
