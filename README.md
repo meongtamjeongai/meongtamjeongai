@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://meongtamjeongai.github.io/meongtamjeongai/">
-    <strong>🌐 발표 프레젠테이션 바로가기</strong>
+    <strong style="font-size: 28px;">🌐 발표 프레젠테이션 바로가기 🌐</strong>
   </a>
 </p>
 
@@ -21,7 +21,6 @@
 **🎬 [전체 기능 시연 영상 보러가기 (Google Drive)](https://drive.google.com/file/d/1CW1RFVTsZT1Ahi1aE7jT4XeDva7bOLPT/view?usp=sharing)**
 
 <br>
-
 <details>
 <summary><strong>🖥️ ① 관리자 페이지 (Streamlit)</strong></summary>
 <br>
@@ -80,8 +79,8 @@
 -   **🛡️ 안전한 파일 업로드:** AWS S3 Presigned URL을 사용하여 서버 부하 없이 안전하게 이미지를 업로드합니다.
 -   **🔑 다양한 소셜 로그인:** Google, Kakao, Naver 등 익숙한 소셜 계정을 통해 간편하게 로그인할 수 있습니다.
 -   **🏗️ 코드형 인프라 (IaC):** Terraform을 사용하여 모든 AWS 인프라(VPC, EC2, RDS 등)를 코드로 정의하고 관리합니다.
--   **🔄 자동화된 CI/CD:** GitHub Actions와 Terraform Cloud를 연동하여, 코드 Push 시 자동으로 테스트, 빌드, 배포가 이루어집니다.
--   **🐍 Python-Only 관리자 페이지:** 복잡한 프론트엔드 기술 없이, Streamlit만으로 데이터 관리 및 AI 기능 테스트 페이지를 신속하게 구축했습니다.
+-   **🔄 자동화된 CI/CD:** GitHub App/Actions 과 Terraform Cloud를 연동하여, 코드 Push 시 자동으로 테스트, 빌드, 배포가 이루어집니다.
+-   **🐍 Python-Only 관리자 페이지:** 복잡한 프론트엔드 기술 없이, Streamlit만으로 데이터 관리 및 AI 테스트 페이지를 신속하게 구축했습니다.
 
 ---
 
@@ -99,17 +98,35 @@
 
 ---
 
-## 🧰 기술 스택 (Tech Stack)
+### 🧰 기술 스택 (Tech Stack)
 
-| 구분                        | 기술                                                                                                         |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **⚙️ Backend**              | `FastAPI`, `Python`, `SQLAlchemy`, `Alembic`, `Gunicorn`                                                       |
-| **🖥️ Frontend (Admin)**     | `Streamlit`, `Python`                                                                                        |
-| **🧠 Database & AI**        | `PostgreSQL` (on AWS RDS), `Google Gemini API`                                                               |
-| **☁️ Infrastructure**       | `AWS` (EC2, S3, ALB, VPC, RDS), `Terraform`, `Cloudflare` (DNS, Access)                                        |
-| **🚀 DevOps & CI/CD**       | `Docker`, `Docker Compose`, `GitHub Actions`                                                                 |
-| **🔐 Authentication**       | `JWT`, `Firebase Authentication`, `OAuth2` (Kakao, Naver)                                                      |
-| **💻 Development Env**      | `Dev Container` (VS Code)                                                                                    |
+**⚙️ Backend**
+
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white) ![Alembic](https://img.shields.io/badge/Alembic-4E85A9?style=for-the-badge&logo=alembic&logoColor=white) ![Gunicorn](https://img.shields.io/badge/Gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white)
+
+**🖥️ Frontend (Admin)**
+
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+
+**🧠 Database & AI**
+
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Amazon RDS](https://img.shields.io/badge/Amazon_RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white) ![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E77F0?style=for-the-badge&logo=googlebard&logoColor=white)
+
+**☁️ Infrastructure**
+
+![Amazon AWS](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white) ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white) ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
+
+**🚀 DevOps & CI/CD**
+
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+
+**🔐 Authentication**
+
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) ![OAuth2](https://img.shields.io/badge/OAuth2-2496ED?style=for-the-badge&logo=oauth&logoColor=white) ![Kakao](https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=kakao&logoColor=black) ![Naver](https://img.shields.io/badge/Naver-03C75A?style=for-the-badge&logo=naver&logoColor=white)
+
+**💻 Development Env**
+
+![Visual Studio Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white) ![Dev Containers](https://img.shields.io/badge/Dev_Containers-007ACC?style=for-the-badge&logo=docker&logoColor=white)
 
 ---
 
