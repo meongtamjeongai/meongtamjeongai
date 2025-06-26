@@ -242,7 +242,7 @@ meongtamjeongai-devops/
 3.  **Plan 실행:**
     ```bash
     # 인프라 코드 디렉토리로 이동
-    cd terraform-aws-fastapi-infra
+    cd meongtamjeongai-devops
 
     # Terraform 초기화 (최초 1회 또는 프로바이더 변경 시)
     terraform init
