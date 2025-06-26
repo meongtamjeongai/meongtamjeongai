@@ -6,9 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-  
+
     <title>멍탐정 AI - 아키텍처 개요</title>
-  
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reset.css"
@@ -17,40 +17,39 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.css"
     />
-  
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/theme/night.css"
       id="theme"
     />
-  
+
     <link
       rel="stylesheet"
       as="style"
       crossorigin
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
-  
+
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
     />
-  
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css"
     />
-  
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
     />
-  
+
     <style>
-      /* 사용자 정의 스타일: 필요에 따라 직접 CSS를 수정할 수 있습니다. */
+      /* 사용자 정의 스타일 */
       :root {
         --r-main-font-size: 36px;
-        /* 🎨 [수정 2] 기본 폰트를 Pretendard로 변경 */
         font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
           Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
           "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
@@ -81,63 +80,94 @@
       .reveal pre code {
         max-height: 500px; /* 코드 블록의 최대 높이를 지정하여 스크롤 생성 */
       }
-      /* 이미지 플레이스홀더를 위한 점선 테두리 스타일 */
       .reveal section img.placeholder {
         border: 2px dashed #555;
         background-color: rgba(255, 255, 255, 0.05);
       }
-  
       #part-title-display {
-        position: fixed; /* 화면 기준으로 완벽하게 고정 */
+        position: fixed;
         top: 25px;
         right: 35px;
-        font-size: 16px; /* em 대신 px 단위로 고정 크기 지정 */
+        font-size: 16px;
         font-weight: bold;
         color: #ddd;
         background-color: rgba(0, 0, 0, 0.5);
         padding: 5px 12px;
         border-radius: 15px;
-        z-index: 50; /* 모든 요소 위에 표시되도록 z-index 높게 설정 */
-  
-        /* 부드러운 효과를 위한 트랜지션 */
+        z-index: 50;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.4s, visibility 0.4s;
       }
-  
       #part-title-display.visible {
         opacity: 1;
         visibility: visible;
       }
+
+      /* 로딩 인디케이터 스타일 */
+      #loading-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #1c1e20; /* night 테마와 유사한 배경색 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        color: #eee;
+        font-size: 1.5em;
+        transition: opacity 0.5s, visibility 0.5s; /* 부드러운 사라짐 효과 */
+      }
+      #loading-indicator.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .spinner {
+        margin-bottom: 20px;
+        border: 5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        border-top-color: #fff;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
-<body>
+  <body>
+    <div id="loading-indicator">
+      <div class="spinner"></div>
+      <p>프레젠테이션을 불러오는 중입니다...</p>
+    </div>
+
     <div class="reveal">
       <div id="part-title-display"></div>
       <div class="slides" id="slides-container"></div>
     </div>
 
-    <!-- Font awesome is required for the chalkboard plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Custom controls plugin is used to for opening and closing annotation modes. -->
     <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/plugin.js"></script>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/style.css"
     />
-    <!-- Chalkboard plugin -->
     <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/plugin.js"></script>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/style.css"
     />
-
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.6.0/plugin/mermaid/mermaid.js"></script>
@@ -146,81 +176,51 @@
 
     <script>
       /**
-       * 이 스크립트는 프레젠테이션을 설정하고 실행하는 모든 로직을 포함합니다.
-       * 1. 동적으로 슬라이드 파일 목록을 생성합니다.
-       * 2. 생성된 목록을 기반으로 각 슬라이드 HTML 파일을 불러옵니다.
-       * 3. 불러온 슬라이드들을 페이지에 삽입합니다.
-       * 4. Reveal.js를 초기화하여 프레젠테이션을 시작합니다.
-       */
-
-      /**
        * 개별 HTML 파일을 비동기적으로 불러와 슬라이드 컨테이너에 삽입하는 함수입니다.
-       *
-       * [중요] 빈 슬라이드 문제 해결법에 대한 설명:
-       * Reveal.js에서 수직 슬라이드(아래로 넘어가는 슬라이드)는 <section> 태그 안에
-       * 다른 <section> 태그를 넣는 '중첩 구조'로 만듭니다. (예: slides/slide6.html)
-       *
-       * 이전 방식은 각 파일에서 모든 <section> 태그를 찾아 분해한 뒤 평평하게 나열했기 때문에,
-       * 수직 슬라이드를 감싸는 '부모 <section>'가 내용 없는 빈 슬라이드로 표시되는 문제가 있었습니다.
-       *
-       * 현재 방식은 파일의 HTML 내용을 DOM 구조 그대로 가져와 페이지에 삽입합니다.
-       * ('temp.innerHTML'로 임시 div에 넣고, 'appendChild'로 자식 노드를 그대로 옮기는 방식)
-       * 이를 통해 Reveal.js가 수직 슬라이드 구조를 올바르게 인식하여 빈 슬라이드 문제가 해결됩니다.
        */
       async function loadSlides(files) {
         const container = document.getElementById("slides-container");
         for (const file of files) {
           try {
             const res = await fetch(file);
-            // 파일이 존재하지 않으면(404 Not Found 등) 다음 파일로 넘어감
             if (!res.ok) continue;
 
             const html = await res.text();
-
-            // 파일의 HTML 구조를 그대로 유지하며 페이지에 삽입하는 로직
             const temp = document.createElement("div");
-            temp.innerHTML = html.trim(); // 양 끝의 공백 제거
+            temp.innerHTML = html.trim();
 
-            // 임시 div의 모든 자식 노드(즉, 슬라이드 파일의 <section> 태그)를
-            // 실제 슬라이드 컨테이너로 이동시킴
             while (temp.firstChild) {
               container.appendChild(temp.firstChild);
             }
           } catch (e) {
-            // 네트워크 오류 등으로 파일 로딩 실패 시 콘솔에 경고 메시지 출력
             console.warn(file + " 불러오기 실패:", e);
           }
         }
         // 모든 슬라이드 파일 로딩이 끝난 후 Reveal.js를 초기화
         initReveal();
 
-        // 1. 파트 제목을 표시할 DOM 요소를 가져옵니다.
-        const partTitleDisplay = document.getElementById('part-title-display');
-
-        /**
-         * 현재 슬라이드를 기반으로 파트 제목을 업데이트하는 함수.
-         * @param {object} event - Reveal.js 이벤트 객체
-         */
+        // 파트 제목 업데이트 로직
+        const partTitleDisplay = document.getElementById("part-title-display");
         function updatePartTitle(event) {
-            // 수직 슬라이드를 고려하여, 현재 슬라이드 또는 그 부모에서 'data-part-title' 속성을 찾습니다.
-            const slideWithTitle = event.currentSlide.closest('[data-part-title]');
-            const partTitle = slideWithTitle ? slideWithTitle.dataset.partTitle : '';
+          const slideWithTitle =
+            event.currentSlide.closest("[data-part-title]");
+          const partTitle = slideWithTitle
+            ? slideWithTitle.dataset.partTitle
+            : "";
 
-            if (partTitle) {
-                // 파트 제목이 있으면, 내용을 채우고 'visible' 클래스를 추가하여 보이게 합니다.
-                partTitleDisplay.textContent = partTitle;
-                partTitleDisplay.classList.add('visible');
-            } else {
-                // 파트 제목이 없으면, 'visible' 클래스를 제거하여 사라지게 합니다.
-                partTitleDisplay.classList.remove('visible');
-            }
+          if (partTitle) {
+            partTitleDisplay.textContent = partTitle;
+            partTitleDisplay.classList.add("visible");
+          } else {
+            partTitleDisplay.classList.remove("visible");
+          }
         }
+        Reveal.on("slidechanged", updatePartTitle);
+        Reveal.on("ready", updatePartTitle);
 
-        // 2. 슬라이드가 변경될 때마다 'updatePartTitle' 함수를 호출하도록 이벤트를 등록합니다.
-        Reveal.on('slidechanged', updatePartTitle);
-
-        // 3. 프레젠테이션이 처음 로드되었을 때도 파트 제목이 표시되도록 'ready' 이벤트에도 등록합니다.
-        Reveal.on('ready', updatePartTitle);
+        // 로딩이 모두 완료되면 로딩 인디케이터를 숨깁니다.
+        const loadingIndicator = document.getElementById("loading-indicator");
+        loadingIndicator.classList.add("hidden");
       }
 
       /**
@@ -233,10 +233,8 @@
           margin: 0.04,
           minScale: 0.2,
           maxScale: 2.0,
-          hash: true, // URL 해시(#)를 사용하여 슬라이드 위치 기억
-          center: true, // 슬라이드를 수직으로 가운데 정렬
-
-          // 사용할 플러그인 목록
+          hash: true,
+          center: true,
           plugins: [
             RevealHighlight,
             RevealNotes,
@@ -246,10 +244,7 @@
             RevealChalkboard,
             RevealCustomControls,
           ],
-
-          // 슬라이드 번호 표시 형식 (c: 현재, t: 전체)
           slideNumber: "c/t",
-
           customcontrols: {
             controls: [
               {
@@ -264,22 +259,15 @@
               },
             ],
           },
-
           mermaid: {},
-
-          chalkboard: {
-            // add configuration here
-          },
-
-          // Menu 플러그인 설정
+          chalkboard: {},
           menu: {
-            side: "left", // 메뉴 위치
-            numbers: true, // 슬라이드 번호 표시
-            markers: true, // 현재 슬라이드 마커 표시
-            transitions: true, // 메뉴에서 슬라이드 전환 효과 활성화
+            side: "left",
+            numbers: true,
+            markers: true,
+            transitions: true,
           },
         });
-        // Reveal.js 준비 완료 후 레이아웃을 다시 계산하여 렌더링 오류 방지
         Reveal.on("ready", (event) => {
           try {
             Reveal.layout();
@@ -290,68 +278,54 @@
       }
 
       /**
-       * 웹 페이지의 기본 콘텐츠(DOM)가 모두 로드되었을 때 스크립트를 실행하기 위한 이벤트 리스너입니다.
+       * DOM 로드 완료 후, 동적으로 슬라이드를 탐색하고 불러옵니다.
        */
       window.addEventListener("DOMContentLoaded", async () => {
-        // 동적으로 슬라이드 파일 목록을 생성
         const slideFiles = [];
-        
-        // 1부터 17까지의 슬라이드 로드
-        for (let i = 1; i <= 17; i++) {
-          const filename = `slides/slide${i}.html`;
+        const MAX_SLIDES = 200; // 무한 루프 방지를 위한 최대 슬라이드 검색 개수
+
+        /**
+         * 파일 존재 여부를 확인하고, 존재하면 목록에 추가하는 헬퍼 함수
+         */
+        const addSlideIfExists = async (filename) => {
           try {
             const response = await fetch(filename, { method: "HEAD" });
             if (response.ok) {
               slideFiles.push(filename);
-            } else {
-              console.warn(`File not found: ${filename}`);
-              break;
+              return true;
             }
+            return false;
           } catch (e) {
             console.error(`Error checking file ${filename}:`, e);
+            return false;
+          }
+        };
+
+        for (let i = 0; i <= MAX_SLIDES; i++) {
+          // 1. 기본 슬라이드(slideN.html) 확인
+          const mainSlideFile = `slides/slide${i}.html`;
+          const mainSlideExists = await addSlideIfExists(mainSlideFile);
+
+          // 2. 하위 슬라이드(slideN-M.html) 확인
+          if (mainSlideExists) {
+            for (let j = 0; j < 20; j++) {
+              // 하위 슬라이드는 최대 20개까지 확인
+              const subSlideFile = `slides/slide${i}-${j}.html`;
+              const subSlideExists = await addSlideIfExists(subSlideFile);
+              if (!subSlideExists) {
+                break; // 해당 번호의 하위 슬라이드가 더이상 없으면 중단
+              }
+            }
+          }
+
+          // 3. 연속된 번호의 기본 슬라이드가 없으면 탐색 종료
+          if (i > 0 && !mainSlideExists) {
+            // 연속성이 깨졌으므로 탐색을 중단하여 불필요한 요청 방지
             break;
           }
         }
-        
-        // Streamlit 관련 추가 슬라이드 (17-1, 17-2)
-        const additionalSlides = [
-          'slides/slide17-0.html',
-          'slides/slide17-1.html',
-          'slides/slide17-2.html',
-        ];
-        
-        // 추가 슬라이드 중 존재하는 파일만 추가
-        for (const slide of additionalSlides) {
-          try {
-            const response = await fetch(slide, { method: "HEAD" });
-            if (response.ok) {
-              slideFiles.push(slide);
-            } else {
-              console.warn(`Additional slide not found: ${slide}`);
-            }
-          } catch (e) {
-            console.error(`Error checking additional slide ${slide}:`, e);
-          }
-        }
-        
-        // 18번 이후 슬라이드 로드
-        for (let i = 18; i <= 50; i++) {
-          const filename = `slides/slide${i}.html`;
-          try {
-            const response = await fetch(filename, { method: "HEAD" });
-            if (response.ok) {
-              slideFiles.push(filename);
-            } else {
-              // 18번 이후 파일이 없으면 중단
-              break;
-            }
-          } catch (e) {
-            console.error(`Error checking file ${filename}:`, e);
-            break;
-          }
-        }
+
         console.log("Found slides:", slideFiles);
-        // 생성된 파일 목록을 기반으로 슬라이드 로딩 시작
         loadSlides(slideFiles);
       });
     </script>

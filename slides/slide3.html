@@ -15,7 +15,7 @@
   <div class="mermaid" style="margin-top: 25px">
     <pre>
   %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
-  graph LR
+graph LR
     subgraph "User & Developer"
       U[📱<br>User]
       D[🧑‍💻<br>Developer]
@@ -23,10 +23,11 @@
   
     subgraph "CI/CD Pipeline"
       G[🐙<br>GitHub]
-          TC[☁️<br>Terraform Cloud]
+      TC[☁️<br>Terraform Cloud]
     end
     
     subgraph "AWS Cloud Infrastructure"
+      ENTRY[🚪<br>Infrastructure Entry]
       ALB(🌐<br>ALB)
       subgraph "Private Zone"
         BE[⚙️<br>FastAPI]
@@ -37,9 +38,10 @@
   
     U --> ALB
     D --> G
-      G -- "VCS Integration" --> TC
-    TC --> BE
-    TC --> DB
+    G -- "VCS Integration" --> TC
+    TC -- "Deploy" --> ENTRY
+    ENTRY -.-> ALB
+    ENTRY -.-> BE
     ALB --> BE
     BE <--> DB
     BE <--> AI
