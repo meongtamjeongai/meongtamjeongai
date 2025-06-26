@@ -26,8 +26,19 @@
 <summary><strong>🖥️ ① 관리자 페이지 (Streamlit)</strong></summary>
 <br>
 
-![관리자 페이지 스크린샷](assets/demo-admin-page.png)
 *Python의 Streamlit 라이브러리만으로 제작된 관리자 페이지입니다. 사용자, 페르소나, 대화방 등 모든 데이터를 관리하고 AI 기능을 직접 테스트할 수 있습니다.*
+
+| 로그인 | 사이드 메뉴 |
+|---|---|
+| ![admin](admin/admin_login.PNG) | ![admin](assets/slide17-1-1.png) |
+
+---
+
+| 대화방 관리              | 대화방 메세지             |
+|------------------|-----------------------|
+| ![admin](admin/admin_conversation1.PNG)       | ![admin](admin/admin_conversation2.PNG)            |
+
+---
 
 </details>
 
@@ -133,7 +144,7 @@ meongtamjeongai-admin/
 <summary><strong>☁️ 인프라 (Terraform) 폴더 구조 보기</strong></summary>
 
 ```
-terraform-aws-fastapi-infra/
+meongtamjeongai-devops/
 ├── modules/              # 재사용 가능한 인프라 단위 (VPC, EC2, RDS 등)
 │   ├── acm/
 │   ├── alb/
