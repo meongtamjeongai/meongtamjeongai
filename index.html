@@ -9,6 +9,23 @@
 
     <title>멍탐정 AI - 아키텍처 개요</title>
 
+    <!-- 중요한 리소스 preload -->
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.css"
+      as="style"
+    />
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"
+      as="script"
+    />
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+      as="style"
+    />
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reset.css"
@@ -139,12 +156,31 @@
           transform: rotate(360deg);
         }
       }
+
+      /* 로딩 진행률 표시 */
+      #progress-bar {
+        width: 300px;
+        height: 6px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+      #progress-fill {
+        height: 100%;
+        background-color: #fff;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
     </style>
   </head>
   <body>
     <div id="loading-indicator">
       <div class="spinner"></div>
-      <p>프레젠테이션을 불러오는 중입니다...</p>
+      <p id="loading-text">프레젠테이션을 불러오는 중입니다...</p>
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
     </div>
 
     <div class="reveal">
@@ -152,55 +188,247 @@
       <div class="slides" id="slides-container"></div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/plugin.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/style.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/plugin.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/style.css"
-    />
+    <!-- 필수 스크립트만 먼저 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.6.0/plugin/mermaid/mermaid.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/zoom/zoom.min.js"></script>
 
     <script>
+      // 캐시 관리
+      const slideCache = new Map();
+
+      // 로딩 진행률 업데이트
+      function updateProgress(loaded, total) {
+        const progressFill = document.getElementById("progress-fill");
+        const progressPercent = (loaded / total) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+
+        const loadingText = document.getElementById("loading-text");
+        loadingText.textContent = `슬라이드 로딩 중... (${loaded}/${total})`;
+      }
+
       /**
-       * 개별 HTML 파일을 비동기적으로 불러와 슬라이드 컨테이너에 삽입하는 함수입니다.
+       * 슬라이드 파일을 병렬로 효율적으로 불러오는 함수
        */
-      async function loadSlides(files) {
+      async function loadSlidesOptimized(files) {
         const container = document.getElementById("slides-container");
-        for (const file of files) {
-          try {
-            const res = await fetch(file);
-            if (!res.ok) continue;
+        const batchSize = 10; // 한 번에 처리할 파일 수 제한
+        const results = [];
 
-            const html = await res.text();
-            const temp = document.createElement("div");
-            temp.innerHTML = html.trim();
+        // 배치 단위로 병렬 처리
+        for (let i = 0; i < files.length; i += batchSize) {
+          const batch = files.slice(i, i + batchSize);
 
-            while (temp.firstChild) {
-              container.appendChild(temp.firstChild);
+          const batchPromises = batch.map(async (file, index) => {
+            const originalIndex = i + index;
+
+            // 캐시 확인
+            if (slideCache.has(file)) {
+              return { file, html: slideCache.get(file), index: originalIndex };
             }
-          } catch (e) {
-            console.warn(file + " 불러오기 실패:", e);
+
+            try {
+              const res = await fetch(file);
+              if (!res.ok) return null;
+
+              const html = await res.text();
+              slideCache.set(file, html); // 캐시에 저장
+
+              return { file, html, index: originalIndex };
+            } catch (e) {
+              console.warn(`${file} 불러오기 실패:`, e);
+              return null;
+            }
+          });
+
+          const batchResults = await Promise.all(batchPromises);
+          results.push(...batchResults.filter(Boolean));
+
+          // 진행률 업데이트
+          updateProgress(Math.min(i + batchSize, files.length), files.length);
+
+          // 브라우저가 다른 작업을 처리할 수 있도록 잠시 대기
+          if (i + batchSize < files.length) {
+            await new Promise((resolve) => setTimeout(resolve, 10));
           }
         }
-        // 모든 슬라이드 파일 로딩이 끝난 후 Reveal.js를 초기화
-        initReveal();
 
-        // 파트 제목 업데이트 로직
+        // 인덱스 순서대로 정렬
+        results.sort((a, b) => a.index - b.index);
+
+        // DocumentFragment 사용으로 DOM 조작 최적화
+        const fragment = document.createDocumentFragment();
+
+        results.forEach(({ html }) => {
+          const temp = document.createElement("div");
+          temp.innerHTML = html.trim();
+          while (temp.firstChild) {
+            fragment.appendChild(temp.firstChild);
+          }
+        });
+
+        container.appendChild(fragment);
+
+        // Reveal.js 초기화
+        initReveal();
+      }
+
+      /**
+       * 스마트한 파일 탐색 - 연속성 기반 최적화
+       */
+      async function discoverSlides() {
+        const slideFiles = [];
+        const MAX_SLIDES = 200;
+        const BATCH_CHECK_SIZE = 5; // 파일 존재 확인도 배치로 처리
+        let consecutiveNotFound = 0;
+
+        for (let i = 0; i <= MAX_SLIDES; i += BATCH_CHECK_SIZE) {
+          const checkPromises = [];
+
+          // 배치 단위로 파일 존재 확인
+          for (let j = 0; j < BATCH_CHECK_SIZE && i + j <= MAX_SLIDES; j++) {
+            const slideIndex = i + j;
+            checkPromises.push(checkSlideExists(slideIndex));
+          }
+
+          const results = await Promise.all(checkPromises);
+
+          let foundInBatch = false;
+          results.forEach((result, batchIndex) => {
+            const slideIndex = i + batchIndex;
+            if (result.mainExists) {
+              slideFiles.push(`slides/slide${slideIndex}.html`);
+              slideFiles.push(...result.subSlides);
+              foundInBatch = true;
+              consecutiveNotFound = 0;
+            } else if (slideIndex > 0) {
+              consecutiveNotFound++;
+            }
+          });
+
+          // 연속으로 파일이 없으면 탐색 중단 (성능 최적화)
+          if (consecutiveNotFound >= 10) {
+            console.log(
+              `연속으로 ${consecutiveNotFound}개 파일이 없어 탐색을 중단합니다.`
+            );
+            break;
+          }
+        }
+
+        console.log("발견된 슬라이드:", slideFiles);
+
+        return slideFiles;
+      }
+
+      /**
+       * 개별 슬라이드와 하위 슬라이드 존재 확인 (최적화된 버전)
+       */
+      async function checkSlideExists(slideIndex) {
+        const mainSlideFile = `slides/slide${slideIndex}.html`;
+        const subSlides = [];
+
+        try {
+          // 메인 슬라이드 확인
+          const mainResponse = await fetch(mainSlideFile, { method: "HEAD" });
+          if (!mainResponse.ok) {
+            return { mainExists: false, subSlides: [] };
+          }
+
+          // 하위 슬라이드 병렬 확인 (최대 10개까지만)
+          const subCheckPromises = [];
+          for (let j = 0; j < 10; j++) {
+            const subSlideFile = `slides/slide${slideIndex}-${j}.html`;
+            subCheckPromises.push(
+              fetch(subSlideFile, { method: "HEAD" })
+                .then((res) => (res.ok ? subSlideFile : null))
+                .catch(() => null)
+            );
+          }
+
+          const subResults = await Promise.all(subCheckPromises);
+          subResults.forEach((result) => {
+            if (result) subSlides.push(result);
+          });
+
+          return { mainExists: true, subSlides };
+        } catch (e) {
+          return { mainExists: false, subSlides: [] };
+        }
+      }
+
+      /**
+       * Reveal.js 초기화 (필수 플러그인만)
+       */
+      function initReveal() {
+        // Mermaid 스크립트 미리 로드
+        loadMermaidScript().then(() => {
+          Reveal.initialize({
+            width: 1280,
+            height: 1280,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0,
+            hash: true,
+            center: true,
+            plugins: [RevealHighlight, RevealNotes, RevealMermaid],
+            slideNumber: "c/t",
+            mermaid: {},
+            // 성능 최적화 설정
+            transition: "none", // 빠른 전환을 위해 애니메이션 비활성화
+            backgroundTransition: "none",
+          });
+
+          Reveal.on("ready", (event) => {
+            try {
+              Reveal.layout();
+
+              // 파트 제목 업데이트 로직
+              setupPartTitleDisplay();
+
+              // 선택적 플러그인 지연 로딩
+              loadOptionalPlugins();
+
+              // 로딩 완료
+              hideLoadingIndicator();
+            } catch (e) {
+              console.error("Error on Reveal.layout(): ", e);
+            }
+          });
+        });
+      }
+
+      /**
+       * Mermaid 스크립트 로드
+       */
+      async function loadMermaidScript() {
+        return new Promise((resolve, reject) => {
+          // Mermaid 이미 로드되었는지 확인
+          if (typeof RevealMermaid !== "undefined") {
+            resolve();
+            return;
+          }
+
+          const script = document.createElement("script");
+          script.src =
+            "https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.6.0/plugin/mermaid/mermaid.js";
+          script.onload = () => {
+            console.log("Mermaid plugin loaded");
+            resolve();
+          };
+          script.onerror = (e) => {
+            console.error("Mermaid plugin 로드 실패:", e);
+            resolve(); // 실패해도 계속 진행
+          };
+          document.head.appendChild(script);
+        });
+      }
+
+      /**
+       * 파트 제목 표시 설정
+       */
+      function setupPartTitleDisplay() {
         const partTitleDisplay = document.getElementById("part-title-display");
+
         function updatePartTitle(event) {
           const slideWithTitle =
             event.currentSlide.closest("[data-part-title]");
@@ -215,118 +443,148 @@
             partTitleDisplay.classList.remove("visible");
           }
         }
+
         Reveal.on("slidechanged", updatePartTitle);
         Reveal.on("ready", updatePartTitle);
+      }
 
-        // 로딩이 모두 완료되면 로딩 인디케이터를 숨깁니다.
+      /**
+       * 선택적 플러그인 지연 로딩
+       */
+      async function loadOptionalPlugins() {
+        try {
+          // 선택적 플러그인들을 백그라운드에서 로드
+          const optionalScripts = [
+            "https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/zoom/zoom.min.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js",
+            "https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/plugin.js",
+            "https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/plugin.js",
+          ];
+
+          const optionalStyles = [
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css",
+            "https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/style.css",
+            "https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/style.css",
+          ];
+
+          // 스타일시트 로드
+          optionalStyles.forEach((href) => {
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = href;
+            document.head.appendChild(link);
+          });
+
+          // 스크립트 순차 로드 (의존성 고려)
+          for (const src of optionalScripts) {
+            await new Promise((resolve, reject) => {
+              const script = document.createElement("script");
+              script.src = src;
+              script.onload = resolve;
+              script.onerror = () => {
+                console.warn(`플러그인 로드 실패: ${src}`);
+                resolve(); // 실패해도 계속 진행
+              };
+              document.head.appendChild(script);
+            });
+          }
+
+          // 추가 플러그인으로 Reveal.js 재구성
+          setTimeout(() => {
+            if (
+              typeof RevealMenu !== "undefined" &&
+              typeof RevealZoom !== "undefined"
+            ) {
+              const currentPlugins = Reveal.getPlugins();
+              const newPlugins = [];
+
+              // 기존 플러그인 유지
+              currentPlugins.forEach((plugin) => newPlugins.push(plugin));
+
+              // 새 플러그인 추가
+              if (typeof RevealMenu !== "undefined")
+                newPlugins.push(RevealMenu);
+              if (typeof RevealZoom !== "undefined")
+                newPlugins.push(RevealZoom);
+              if (typeof RevealChalkboard !== "undefined")
+                newPlugins.push(RevealChalkboard);
+              if (typeof RevealCustomControls !== "undefined")
+                newPlugins.push(RevealCustomControls);
+
+              Reveal.configure({
+                plugins: newPlugins,
+                menu: {
+                  side: "left",
+                  numbers: true,
+                  markers: true,
+                  transitions: true,
+                },
+                customcontrols: {
+                  controls: [
+                    {
+                      icon: '<i class="fa fa-pen-square"></i>',
+                      title: "Toggle chalkboard (B)",
+                      action: "RevealChalkboard.toggleChalkboard();",
+                    },
+                    {
+                      icon: '<i class="fa fa-pen"></i>',
+                      title: "Toggle notes canvas (C)",
+                      action: "RevealChalkboard.toggleNotesCanvas();",
+                    },
+                  ],
+                },
+              });
+            }
+          }, 1000);
+
+          console.log("선택적 플러그인 로딩 완료");
+        } catch (e) {
+          console.warn("일부 선택적 플러그인 로딩 실패:", e);
+        }
+      }
+
+      /**
+       * 로딩 인디케이터 숨기기
+       */
+      function hideLoadingIndicator() {
         const loadingIndicator = document.getElementById("loading-indicator");
         loadingIndicator.classList.add("hidden");
+
+        // 메모리 절약을 위해 잠시 후 제거
+        setTimeout(() => {
+          loadingIndicator.remove();
+        }, 1000);
       }
 
       /**
-       * Reveal.js 라이브러리를 초기화하고 각종 설정을 적용하는 함수입니다.
-       */
-      function initReveal() {
-        Reveal.initialize({
-          width: 1280,
-          height: 1280,
-          margin: 0.04,
-          minScale: 0.2,
-          maxScale: 2.0,
-          hash: true,
-          center: true,
-          plugins: [
-            RevealHighlight,
-            RevealNotes,
-            RevealMermaid,
-            RevealMenu,
-            RevealZoom,
-            RevealChalkboard,
-            RevealCustomControls,
-          ],
-          slideNumber: "c/t",
-          customcontrols: {
-            controls: [
-              {
-                icon: '<i class="fa fa-pen-square"></i>',
-                title: "Toggle chalkboard (B)",
-                action: "RevealChalkboard.toggleChalkboard();",
-              },
-              {
-                icon: '<i class="fa fa-pen"></i>',
-                title: "Toggle notes canvas (C)",
-                action: "RevealChalkboard.toggleNotesCanvas();",
-              },
-            ],
-          },
-          mermaid: {},
-          chalkboard: {},
-          menu: {
-            side: "left",
-            numbers: true,
-            markers: true,
-            transitions: true,
-          },
-        });
-        Reveal.on("ready", (event) => {
-          try {
-            Reveal.layout();
-          } catch (e) {
-            console.error("Error on Reveal.layout(): ", e);
-          }
-        });
-      }
-
-      /**
-       * DOM 로드 완료 후, 동적으로 슬라이드를 탐색하고 불러옵니다.
+       * 메인 로딩 프로세스
        */
       window.addEventListener("DOMContentLoaded", async () => {
-        const slideFiles = [];
-        const MAX_SLIDES = 200; // 무한 루프 방지를 위한 최대 슬라이드 검색 개수
+        try {
+          // 1. 슬라이드 파일 탐색
+          const slideFiles = await discoverSlides();
 
-        /**
-         * 파일 존재 여부를 확인하고, 존재하면 목록에 추가하는 헬퍼 함수
-         */
-        const addSlideIfExists = async (filename) => {
-          try {
-            const response = await fetch(filename, { method: "HEAD" });
-            if (response.ok) {
-              slideFiles.push(filename);
-              return true;
-            }
-            return false;
-          } catch (e) {
-            console.error(`Error checking file ${filename}:`, e);
-            return false;
-          }
-        };
+          // 2. 슬라이드 로딩 및 초기화
+          await loadSlidesOptimized(slideFiles);
+        } catch (error) {
+          console.error("프레젠테이션 로딩 중 오류 발생:", error);
 
-        for (let i = 0; i <= MAX_SLIDES; i++) {
-          // 1. 기본 슬라이드(slideN.html) 확인
-          const mainSlideFile = `slides/slide${i}.html`;
-          const mainSlideExists = await addSlideIfExists(mainSlideFile);
+          // 오류 시 로딩 인디케이터 숨기기
+          hideLoadingIndicator();
 
-          // 2. 하위 슬라이드(slideN-M.html) 확인
-          if (mainSlideExists) {
-            for (let j = 0; j < 20; j++) {
-              // 하위 슬라이드는 최대 20개까지 확인
-              const subSlideFile = `slides/slide${i}-${j}.html`;
-              const subSlideExists = await addSlideIfExists(subSlideFile);
-              if (!subSlideExists) {
-                break; // 해당 번호의 하위 슬라이드가 더이상 없으면 중단
-              }
-            }
-          }
+          // 사용자에게 오류 알림
+          document.getElementById("slides-container").innerHTML =
+            "<section><h2>로딩 오류</h2><p>프레젠테이션을 불러오는 중 오류가 발생했습니다.</p></section>";
 
-          // 3. 연속된 번호의 기본 슬라이드가 없으면 탐색 종료
-          if (i > 0 && !mainSlideExists) {
-            // 연속성이 깨졌으므로 탐색을 중단하여 불필요한 요청 방지
-            break;
-          }
+          // 기본 Reveal.js 초기화
+          initReveal();
         }
+      });
 
-        console.log("Found slides:", slideFiles);
-        loadSlides(slideFiles);
+      // 페이지 언로드 시 캐시 정리
+      window.addEventListener("beforeunload", () => {
+        slideCache.clear();
       });
     </script>
   </body>
