@@ -34,9 +34,9 @@
 
 ---
 
-| 대화방 관리              | 대화방 메세지             |
-|------------------|-----------------------|
-| ![admin](admin/admin_conversation1.PNG)       | ![admin](admin/admin_conversation2.PNG)            |
+| 대화방 관리 | 대화방 메세지 |
+|---|---|
+| ![admin](admin/admin_conversation1.PNG) | ![admin](admin/admin_conversation2.PNG) |
 
 ---
 
@@ -46,8 +46,11 @@
 <summary><strong>📄 ② API 문서 (FastAPI + Scalar)</strong></summary>
 <br>
 
-![API 문서 스크린샷](assets/demo-api-docs.png)
 *FastAPI가 Pydantic 모델을 기반으로 자동 생성한 인터랙티브 API 문서입니다. 모든 엔드포인트를 직접 테스트해볼 수 있습니다.*
+
+| 메인 | 사이드 메뉴 | 테스트 |
+|---|---|---|
+| ![api](api/api_main.PNG) | ![api](api/api_menu.PNG) | ![api](api/api_test.PNG) |
 
 </details>
 
@@ -55,8 +58,9 @@
 <summary><strong>☁️ ③ 인프라 관리 (Terraform Cloud)</strong></summary>
 <br>
 
-![Terraform Cloud 워크스페이스](assets/slide4-4.png)
 *GitHub과 연동된 Terraform Cloud 워크스페이스입니다. 코드 변경 시 자동으로 Plan/Apply가 실행되고 모든 배포 이력이 기록됩니다.*
+
+![Terraform Cloud 워크스페이스](assets/slide4-4.png)
 
 </details>
 
@@ -174,8 +178,11 @@ meongtamjeongai-devops/
 
 1.  **저장소 클론:**
     ```bash
-    git clone https://github.com/your-github-username/meongtamjeong-ai.git
-    cd meongtamjeong-ai
+    git clone https://github.com/meongtamjeongai/meongtamjeongai-backend.git
+    cd meongtamjeongai-backend
+
+    git clone https://github.com/meongtamjeongai/meongtamjeongai-admin.git
+    cd meongtamjeongai-admin
     ```
 
 2.  **환경 변수 파일 생성:**
