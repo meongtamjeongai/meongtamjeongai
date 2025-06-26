@@ -90,6 +90,39 @@
 
 이 프로젝트는 개발, 배포, 운영의 전 과정을 자동화하고, 각 구성 요소를 명확하게 분리하여 안정성과 확장성을 확보하는 것을 목표로 설계되었습니다.
 
+```mermaid
+graph LR
+    subgraph "User & Developer"
+      U[📱<br>User]
+      D[🧑‍💻<br>Developer]
+    end
+  
+    subgraph "CI/CD Pipeline"
+      G[🐙<br>GitHub]
+      TC[☁️<br>Terraform Cloud]
+    end
+    
+    subgraph "AWS Cloud Infrastructure"
+      ENTRY[🚪<br>Infrastructure Entry]
+      ALB(🌐<br>ALB)
+      subgraph "Private Zone"
+        BE[⚙️<br>FastAPI]
+        DB[🐘<br>AWS DB]
+      end
+      AI[✨<br>Gemini AI]
+    end
+  
+    U --> ALB
+    D --> G
+    G -- "VCS Integration" --> TC
+    TC -- "Deploy" --> ENTRY
+    ENTRY -.-> ALB
+    ENTRY -.-> BE
+    ALB --> BE
+    BE <--> DB
+    BE <--> AI
+```
+
 ![전체 아키텍처 다이어그램](assets/slide3-1.png)
 
 ---
