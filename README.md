@@ -70,6 +70,12 @@
 
 ---
 
+## 📦 ERD (Entity Relationship Diagram)
+
+![ERD](assets/slide14-1.png)
+
+---
+
 ## 🧰 기술 스택 (Tech Stack)
 
 | 구분                        | 기술                                                                                                         |
