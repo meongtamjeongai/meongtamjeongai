@@ -1,10 +1,10 @@
 # 멍탐정 AI (Meongtamjeong AI) 🕵️‍♂️
 
-<p align="center">
+<h2 align="center">
   <a href="https://meongtamjeongai.github.io/meongtamjeongai/">
-    <strong style="font-size: 28px;">🌐 발표 프레젠테이션 바로가기 🌐</strong>
+    🌐 발표 프레젠테이션 바로가기 🌐
   </a>
-</p>
+</h2>
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Last Commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai)
