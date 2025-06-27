@@ -8,7 +8,6 @@
   </a>
 </h2>
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Last Commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
