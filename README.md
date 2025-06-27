@@ -23,6 +23,16 @@
 
 ---
 
+## 🧑‍💻 팀원 소개 (Our Team)
+
+| 이름 | 담당 역할 |
+| :---: | :--- |
+| **김영범** | ⚙️ 백엔드<br>💻 프론트엔드 (어드민)<br>🚀 데브옵스 |
+| **공진영** | 📱 프론트엔드 (Flutter 앱) |
+| **한충현** | 🤝 운영 및 기술 지원<br>🧪 QA |
+
+---
+
 ## 🚀 시연 영상 및 주요 결과
 
 **🎬 [전체 기능 시연 영상 보러가기 (Google Drive)](https://drive.google.com/file/d/1CW1RFVTsZT1Ahi1aE7jT4XeDva7bOLPT/view?usp=sharing)**
