@@ -1,0 +1,51 @@
+  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
+    <!-- 스타일 정의 -->
+    <style>
+      .timeline-container { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .bg-line { stroke: #e1e4e8; stroke-width: 10; stroke-linecap: round; }
+      .progress-line { stroke: #0366d6; stroke-width: 10; stroke-linecap: round; }
+      .milestone-circle { fill: #0366d6; }
+      .milestone-text { font-size: 14px; font-weight: 600; fill: #24292e; text-anchor: middle; }
+      .date-text { font-size: 12px; fill: #586069; text-anchor: middle; }
+      .week-text { font-size: 12px; font-weight: 500; fill: #6a737d; text-anchor: middle; }
+    </style>
+    
+    <g class="timeline-container">
+      <!-- 배경 라인 -->
+      <line x1="50" y1="75" x2="750" y2="75" class="bg-line" />
+      <!-- 진행률 라인 -->
+      <line x1="50" y1="75" x2="750" y2="75" class="progress-line" />
+
+      <!-- 시작 마일스톤 -->
+      <g>
+        <circle cx="50" cy="75" r="8" class="milestone-circle" />
+        <text x="50" y="45" class="milestone-text">🚀 시작</text>
+        <text x="50" y="110" class="date-text">2025-05-23</text>
+      </g>
+
+      <!-- 주차별 마커 (4주 분량으로 재배치) -->
+      <g>
+        <text x="138" y="60" class="week-text">Week 1</text>
+        <line x1="138" y1="70" x2="138" y2="80" stroke="#fff" stroke-width="2"/>
+      </g>
+      <g>
+        <text x="313" y="60" class="week-text">Week 2</text>
+        <line x1="313" y1="70" x2="313" y2="80" stroke="#fff" stroke-width="2"/>
+      </g>
+      <g>
+        <text x="488" y="60" class="week-text">Week 3</text>
+        <line x1="488" y1="70" x2="488" y2="80" stroke="#fff" stroke-width="2"/>
+      </g>
+      <g>
+        <text x="663" y="60" class="week-text">Week 4</text>
+        <line x1="663" y1="70" x2="663" y2="80" stroke="#fff" stroke-width="2"/>
+      </g>
+      
+      <!-- 종료 마일스톤 -->
+      <g>
+        <circle cx="750" cy="75" r="8" class="milestone-circle" />
+        <text x="750" y="45" class="milestone-text">🏁 종료</text>
+        <text x="750" y="110" class="date-text">2025-06-20</text>
+      </g>
+    </g>
+  </svg>

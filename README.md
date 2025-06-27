@@ -2,6 +2,8 @@
     <img src="https://capsule-render.vercel.app/api?type=waving&color=black&height=300§ion=header&text=멍탐정%20AI%20🕵️‍♂️&fontSize=50&animation=fadeIn&fontAlignY=38&desc=AI%20기반%20피싱%20대응%20훈련%20플랫폼&descAlignY=76&descAlign=62"/>
 </p>
 
+![TiemLine](assets/timeline.svg)
+
 <h2 align="center">
   <a href="https://meongtamjeongai.github.io/meongtamjeongai/">
     🌐 발표 프레젠테이션 바로가기 🌐
