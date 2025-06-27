@@ -2,9 +2,13 @@
     <img src="https://capsule-render.vercel.app/api?type=waving&color=black&height=300§ion=header&text=멍탐정%20AI%20🕵️‍♂️&fontSize=50&animation=fadeIn&fontAlignY=38&desc=AI%20기반%20피싱%20대응%20훈련%20플랫폼&descAlignY=76&descAlign=62"/>
 </p>
 
+
 <h2 align="center">
+  <a href="https://docs.google.com/presentation/d/10FaXI3iguvfK_G2M1bYHhq2_LpMSy6Fz/edit?slide=id.p1#slide=id.p1">
+    🌐 프로젝트 발표 프레젠테이션 바로가기 |
+  </a>
   <a href="https://meongtamjeongai.github.io/meongtamjeongai/">
-    🌐 발표 프레젠테이션 바로가기 🌐
+      아키텍처 발표 프레젠테이션 바로가기 🌐
   </a>
 </h2>
 
