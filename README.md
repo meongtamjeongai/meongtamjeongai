@@ -55,9 +55,25 @@
 
 | 대화방 관리 | 대화방 메세지 |
 |---|---|
-| ![admin](admin/admin_conversation1.PNG) | ![admin](admin/admin_conversation2.PNG) |
+| ![admin_conversation1](admin/admin_conversation1.PNG) | ![admin_conversation2](admin/admin_conversation2.PNG) |
 
 ---
+
+| 피싱 사례 관리 | 피싱 사례 생성 |
+|---|---|
+| ![admin_FISHING1](admin/admin_FISHING1.PNG) | ![admin_FISHING2](admin/admin_FISHING2.PNG) |
+
+---
+
+| 이미지 피싱 분석 | 분석 결과 |
+|---|---|
+| ![admin_image_scan1](admin/admin_image_scan1.PNG) | ![admin_image_scan2](admin/admin_image_scan2.PNG) |
+
+---
+
+| 페르소나 관리 | 페르소나 생성 |
+|---|---|
+| ![admin](admin/admin_persona1.PNG) | ![admin](admin/admin_persona2.PNG) |
 
 </details>
 
