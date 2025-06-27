@@ -2,10 +2,6 @@
     <img src="https://capsule-render.vercel.app/api?type=waving&color=black&height=300§ion=header&text=멍탐정%20AI%20🕵️‍♂️&fontSize=50&animation=fadeIn&fontAlignY=38&desc=AI%20기반%20피싱%20대응%20훈련%20플랫폼&descAlignY=76&descAlign=62"/>
 </p>
 
-![TiemLine](assets/timeline.svg)
-
----
-
 <h2 align="center">
   <a href="https://meongtamjeongai.github.io/meongtamjeongai/">
     🌐 발표 프레젠테이션 바로가기 🌐
@@ -19,6 +15,11 @@
 **Flutter, Terraform, FastAPI, Streamlit을 활용한 AI 기반 피싱 대응 훈련 플랫폼**
 
 '멍탐정 AI'는 사용자가 AI 챗봇과의 대화를 통해 현실과 유사한 피싱 시나리오를 경험하고, 이에 대한 대응 능력을 안전하게 훈련할 수 있도록 설계된 서비스입니다. 이 프로젝트는 현대적인 DevOps 파이프라인과 효율적인 백엔드/프론트엔드 기술 스택을 기반으로 구축되었습니다.
+
+---
+
+## 🗓️ 프로젝트 타임라인
+![TiemLine](assets/timeline.svg)
 
 ---
 
