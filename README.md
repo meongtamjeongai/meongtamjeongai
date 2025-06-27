@@ -4,6 +4,8 @@
 
 ![TiemLine](assets/timeline.svg)
 
+---
+
 <h2 align="center">
   <a href="https://meongtamjeongai.github.io/meongtamjeongai/">
     🌐 발표 프레젠테이션 바로가기 🌐
