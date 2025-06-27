@@ -86,6 +86,17 @@
 
 ---
 
+## 🐾 프로젝트 저장소 목록 (Our Repositories)
+
+| 저장소 (Repository) | 설명 (Description) | 상태 (Status) |
+| :--- | :--- | :--- |
+| 📱 **[meongtamjeongai-app](https://github.com/meongtamjeongai/meongtamjeongai-app)** | 플러터를 활용한 크로스플랫폼 모바일 앱 | [![GitHub last commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai-app?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-app) [![Top Language](https://img.shields.io/github/languages/top/meongtamjeongai/meongtamjeongai-app?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-app) |
+| 🗄️ **[meongtamjeongai-backend](https://github.com/meongtamjeongai/meongtamjeongai-backend)** | FastAPI를 활용한  백엔드 API 서버 | [![GitHub last commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai-backend?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-backend) [![Top Language](https://img.shields.io/github/languages/top/meongtamjeongai/meongtamjeongai-backend?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-backend) |
+| 🛠️ **[meongtamjeongai-admin](https://github.com/meongtamjeongai/meongtamjeongai-admin)** | Streamlit을 활용한 어드민 페이지 | [![GitHub last commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai-admin?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-admin) [![Top Language](https://img.shields.io/github/languages/top/meongtamjeongai/meongtamjeongai-admin?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-admin) |
+| 🚀 **[meongtamjeongai-devops](https://github.com/meongtamjeongai/meongtamjeongai-devops)** | 테라폼을 활용한 AWS 인프라 구축 (IaC) | [![GitHub last commit](https://img.shields.io/github/last-commit/meongtamjeongai/meongtamjeongai-devops?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-devops) [![Top Language](https://img.shields.io/github/languages/top/meongtamjeongai/meongtamjeongai-devops?style=flat-square)](https://github.com/meongtamjeongai/meongtamjeongai-devops) |
+
+---
+
 ## 🗺️ 전체 아키텍처
 
 이 프로젝트는 개발, 배포, 운영의 전 과정을 자동화하고, 각 구성 요소를 명확하게 분리하여 안정성과 확장성을 확보하는 것을 목표로 설계되었습니다.
